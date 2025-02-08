@@ -22,6 +22,11 @@ class Review
     #[ORM\Column(length: 50, nullable: true)]
     private ?string $status = null;
 
+    #[ORM\ManyToOne(inversedBy: 'review')]
+    private ?User $user = null;
+
+
+    
     public function getId(): ?int
     {
         return $this->id;
@@ -59,6 +64,18 @@ class Review
     public function setStatus(?string $status): static
     {
         $this->status = $status;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
 
         return $this;
     }

@@ -2,17 +2,18 @@
 
 namespace App\Controller;
 
+use App\Repository\BrandRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Serializer\SerializerInterface;
 
 class BrandController extends AbstractController
 {
-    #[Route('/brand', name: 'app_brand')]
-    public function index(): Response
+    #[Route('/api/brand/all')]
+    public function findAll(BrandRepository $brandRepository,SerializerInterface $serializer): JsonResponse
     {
-        return $this->render('brand/index.html.twig', [
-            'controller_name' => 'BrandController',
-        ]);
+       return $this->json($serializer->serialize($brandRepository->findAll(), 'json'));
     }
 }

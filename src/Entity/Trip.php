@@ -3,9 +3,10 @@
 namespace App\Entity;
 
 use App\Repository\TripRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use phpDocumentor\Reflection\Types\Collection;
 
 #[ORM\Entity(repositoryClass: TripRepository::class)]
 class Trip
@@ -42,11 +43,129 @@ class Trip
     #[ORM\Column]
     private ?float $price = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $person = null;
+    #[ORM\ManyToOne(targetEntity: Car::class)]
+    private ?Car $car;
 
-    #[ORM\ManyToMany(targetEntity: Trip::class, inversedBy: 'trips')]
-    private Collection $users;
+    /**
+     * @var Collection<int, User>
+     */
+    #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'trips')]
+    private ?Collection $users;
+
+    public function __construct()
+    {
+        $this->users = new ArrayCollection();
+    }
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function setId(?int $id): void
+    {
+        $this->id = $id;
+    }
+
+    public function getDepartDate(): ?\DateTimeInterface
+    {
+        return $this->departDate;
+    }
+
+    public function setDepartDate(?\DateTimeInterface $departDate): void
+    {
+        $this->departDate = $departDate;
+    }
+
+    public function getDepartHour(): ?\DateTimeInterface
+    {
+        return $this->departHour;
+    }
+
+    public function setDepartHour(?\DateTimeInterface $departHour): void
+    {
+        $this->departHour = $departHour;
+    }
+
+    public function getDepartLocation(): ?string
+    {
+        return $this->departLocation;
+    }
+
+    public function setDepartLocation(?string $departLocation): void
+    {
+        $this->departLocation = $departLocation;
+    }
+
+    public function getArrivalDate(): ?\DateTimeInterface
+    {
+        return $this->arrivalDate;
+    }
+
+    public function setArrivalDate(?\DateTimeInterface $arrivalDate): void
+    {
+        $this->arrivalDate = $arrivalDate;
+    }
+
+    public function getArrivalHour(): ?\DateTimeInterface
+    {
+        return $this->arrivalHour;
+    }
+
+    public function setArrivalHour(?\DateTimeInterface $arrivalHour): void
+    {
+        $this->arrivalHour = $arrivalHour;
+    }
+
+    public function getArrivalLocation(): ?string
+    {
+        return $this->arrivalLocation;
+    }
+
+    public function setArrivalLocation(?string $arrivalLocation): void
+    {
+        $this->arrivalLocation = $arrivalLocation;
+    }
+
+    public function getStatus(): ?string
+    {
+        return $this->status;
+    }
+
+    public function setStatus(?string $status): void
+    {
+        $this->status = $status;
+    }
+
+    public function getPlaceNumber(): ?int
+    {
+        return $this->placeNumber;
+    }
+
+    public function setPlaceNumber(?int $placeNumber): void
+    {
+        $this->placeNumber = $placeNumber;
+    }
+
+    public function getPrice(): ?float
+    {
+        return $this->price;
+    }
+
+    public function setPrice(?float $price): void
+    {
+        $this->price = $price;
+    }
+
+    public function getCar(): ?Car
+    {
+        return $this->car;
+    }
+
+    public function setCar(?Car $car): void
+    {
+        $this->car = $car;
+    }
 
     public function getUsers(): Collection
     {
@@ -58,127 +177,22 @@ class Trip
         $this->users = $users;
     }
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
 
-    public function getDepartDate(): ?\DateTimeInterface
+    public function addUser(User $user): static
     {
-        return $this->departDate;
-    }
-
-    public function setDepartDate(\DateTimeInterface $departDate): static
-    {
-        $this->departDate = $departDate;
+        if (!$this->users->contains($user)) {
+            $this->users->add($user);
+            $user->addTrip($this);
+        }
 
         return $this;
     }
 
-    public function getDepartHour(): ?\DateTimeInterface
+    public function removeUser(User $user): static
     {
-        return $this->departHour;
-    }
-
-    public function setDepartHour(\DateTimeInterface $departHour): static
-    {
-        $this->departHour = $departHour;
-
-        return $this;
-    }
-
-    public function getDepartLocation(): ?string
-    {
-        return $this->departLocation;
-    }
-
-    public function setDepartLocation(string $departLocation): static
-    {
-        $this->departLocation = $departLocation;
-
-        return $this;
-    }
-
-    public function getArrivalDate(): ?\DateTimeInterface
-    {
-        return $this->arrivalDate;
-    }
-
-    public function setArrivalDate(\DateTimeInterface $arrivalDate): static
-    {
-        $this->arrivalDate = $arrivalDate;
-
-        return $this;
-    }
-
-    public function getArrivalHour(): ?\DateTimeInterface
-    {
-        return $this->arrivalHour;
-    }
-
-    public function setArrivalHour(\DateTimeInterface $arrivalHour): static
-    {
-        $this->arrivalHour = $arrivalHour;
-
-        return $this;
-    }
-
-    public function getArrivalLocation(): ?string
-    {
-        return $this->arrivalLocation;
-    }
-
-    public function setArrivalLocation(string $arrivalLocation): static
-    {
-        $this->arrivalLocation = $arrivalLocation;
-
-        return $this;
-    }
-
-    public function getStatus(): ?string
-    {
-        return $this->status;
-    }
-
-    public function setStatus(string $status): static
-    {
-        $this->status = $status;
-
-        return $this;
-    }
-
-    public function getPlaceNumber(): ?int
-    {
-        return $this->placeNumber;
-    }
-
-    public function setPlaceNumber(int $placeNumber): static
-    {
-        $this->placeNumber = $placeNumber;
-
-        return $this;
-    }
-
-    public function getPrice(): ?float
-    {
-        return $this->price;
-    }
-
-    public function setPrice(float $price): static
-    {
-        $this->price = $price;
-
-        return $this;
-    }
-
-    public function getPerson(): ?string
-    {
-        return $this->person;
-    }
-
-    public function setPerson(string $person): static
-    {
-        $this->person = $person;
+        if ($this->users->removeElement($user)) {
+            $user->removeTrip($this);
+        }
 
         return $this;
     }

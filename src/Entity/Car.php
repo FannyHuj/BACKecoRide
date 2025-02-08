@@ -28,31 +28,22 @@ class Car
     #[ORM\Column(length: 50)]
     private ?string $firstRegistrationDate = null;
 
-    #[ORM\OneToOne(targetEntity: Brand::class)]
-    private Collection $car;
+    #[ORM\ManyToOne(targetEntity: Brand::class)]
+    private Brand $brand;
 
-    public function getCars(): Collection
+    #[ORM\ManyToOne(inversedBy: 'cars')]
+    private ?User $user = null;
+
+    public function getBrand()  
     {
-        return $this->cars;
+        return $this->brand;
+    }   
+
+    public function setBrand($brand): void
+    {
+        $this->brand = $brand;
     }
 
-    public function setCars(Collection $cars): void
-    {
-        $this->cars = $cars;
-    }
-
-    public function getCar(): Collection
-    {
-        return $this->car;
-    }
-
-    public function setCar(Collection $car): void
-    {
-        $this->car = $car;
-    }
-
-    #[ORM\OneToOne(targetEntity: User::class)]
-    private Collection $cars;
     public function getId(): ?int
     {
         return $this->id;
@@ -114,6 +105,18 @@ class Car
     public function setFirstRegistrationDate(string $firstRegistrationDate): static
     {
         $this->firstRegistrationDate = $firstRegistrationDate;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
 
         return $this;
     }

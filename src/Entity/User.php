@@ -3,96 +3,78 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use phpDocumentor\Reflection\Types\Collection;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-#[ORM\Table(name: '`user`')]
-class User
+#[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 50)]
-    private ?string $lastName = null;
+    #[ORM\Column(length: 180)]
+    private ?string $email = null;
 
-    #[ORM\Column(length: 50)]
-    private ?string $firstName = null;
+    /**
+     * @var list<string> The user roles
+     */
+    #[ORM\Column]
+    private array $roles = [];
 
-    #[ORM\Column(length: 50)]
-    private ?string $mail = null;
-
-    #[ORM\Column(length: 50)]
+    /**
+     * @var string The hashed password
+     */
+    #[ORM\Column]
     private ?string $password = null;
 
-    #[ORM\Column(length: 50)]
+    #[ORM\Column(length: 50, nullable: true)]
+    private ?string $lastName = null;
+
+    #[ORM\Column(length: 50, nullable: true)]
+    private ?string $firstName = null;
+
+    #[ORM\Column(length: 50, nullable: true)]
     private ?string $phoneNumber = null;
 
-    #[ORM\Column(length: 50)]
-    private ?string $adress = null;
+    #[ORM\Column(length: 50, nullable: true)]
+    private ?string $address = null;
 
-    #[ORM\Column(length: 50)]
-    private ?string $birthDate = null;
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $birthDate = null;
 
-    #[ORM\Column(type: Types::BLOB, nullable: true)]
-    private $picture;
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $picture = null;
 
-    #[ORM\Column(length: 50)]
-    private ?string $pseudo = null;
-    #[ORM\Column(length: 50)]
-    #[ORM\OneToMany(targetEntity: Role::class)]
-    private ?Role $role = null;
+    /**
+     * @var Collection<int, Review>
+     */
+    #[ORM\OneToMany(targetEntity: Review::class, mappedBy: 'user')]
+    private Collection $review;
 
-    #[ORM\OneToMany(targetEntity: Review::class)]
-    private ?Review $review = null;
+    /**
+     * @var Collection<int, Car>
+     */
+    #[ORM\OneToMany(targetEntity: Car::class, mappedBy: 'user')]
+    private Collection $cars;
 
-    public function getUsers(): Collection
-    {
-        return $this->users;
-    }
-
-    public function setUsers(Collection $users): void
-    {
-        $this->users = $users;
-    }
-
+    /**
+     * @var Collection<int, Trip>
+     */
     #[ORM\ManyToMany(targetEntity: Trip::class, inversedBy: 'users')]
     private Collection $trips;
 
-    #[ORM\ManyToMany(targetEntity: Car::class, inversedBy: 'users')]
-    private Collection $users;
-
-    public function getTrips(): Collection
+    public function __construct()
     {
-        return $this->trips;
-    }
-
-    public function setTrips(Collection $trips): void
-    {
-        $this->trips = $trips;
-    }
-
-    public function getReview(): ?Review
-    {
-        return $this->review;
-    }
-
-    public function setReview(?Review $review): void
-    {
-        $this->review = $review;
-    }
-
-    public function getRole(): ?Role
-    {
-        return $this->role;
-    }
-
-    public function setRole(?Role $role): void
-    {
-        $this->role = $role;
+        $this->review = new ArrayCollection();
+        $this->cars = new ArrayCollection();
+        $this->trips = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -100,42 +82,55 @@ class User
         return $this->id;
     }
 
-    public function getLastName(): ?string
+    public function getEmail(): ?string
     {
-        return $this->lastName;
+        return $this->email;
     }
 
-    public function setLastName(string $lastName): static
+    public function setEmail(string $email): static
     {
-        $this->lastName = $lastName;
+        $this->email = $email;
 
         return $this;
     }
 
-    public function getFirstName(): ?string
+    /**
+     * A visual identifier that represents this user.
+     *
+     * @see UserInterface
+     */
+    public function getUserIdentifier(): string
     {
-        return $this->firstName;
+        return (string) $this->email;
     }
 
-    public function setFirstName(string $firstName): static
+    /**
+     * @see UserInterface
+     *
+     * @return list<string>
+     */
+    public function getRoles(): array
     {
-        $this->firstName = $firstName;
+        $roles = $this->roles;
+        // guarantee every user at least has ROLE_USER
+        $roles[] = 'ROLE_USER';
+
+        return array_unique($roles);
+    }
+
+    /**
+     * @param list<string> $roles
+     */
+    public function setRoles(array $roles): static
+    {
+        $this->roles = $roles;
 
         return $this;
     }
 
-    public function getMail(): ?string
-    {
-        return $this->mail;
-    }
-
-    public function setMail(string $mail): static
-    {
-        $this->mail = $mail;
-
-        return $this;
-    }
-
+    /**
+     * @see PasswordAuthenticatedUserInterface
+     */
     public function getPassword(): ?string
     {
         return $this->password;
@@ -148,63 +143,172 @@ class User
         return $this;
     }
 
+    /**
+     * @see UserInterface
+     */
+    public function eraseCredentials(): void
+    {
+        // If you store any temporary, sensitive data on the user, clear it here
+        // $this->plainPassword = null;
+    }
+
+    public function getLastName(): ?string
+    {
+        return $this->lastName;
+    }
+
+    public function setLastName(?string $lastName): static
+    {
+        $this->lastName = $lastName;
+
+        return $this;
+    }
+
+    public function getFirstName(): ?string
+    {
+        return $this->firstName;
+    }
+
+    public function setFirstName(?string $firstName): static
+    {
+        $this->firstName = $firstName;
+
+        return $this;
+    }
+
     public function getPhoneNumber(): ?string
     {
         return $this->phoneNumber;
     }
 
-    public function setPhoneNumber(string $phoneNumber): static
+    public function setPhoneNumber(?string $phoneNumber): static
     {
         $this->phoneNumber = $phoneNumber;
 
         return $this;
     }
 
-    public function getAdress(): ?string
+    public function getAddress(): ?string
     {
-        return $this->adress;
+        return $this->address;
     }
 
-    public function setAdress(string $adress): static
+    public function setAddress(?string $address): static
     {
-        $this->adress = $adress;
+        $this->address = $address;
 
         return $this;
     }
 
-    public function getBirthDate(): ?string
+    public function getBirthDate(): ?\DateTimeInterface
     {
         return $this->birthDate;
     }
 
-    public function setBirthDate(string $birthDate): static
+    public function setBirthDate(?\DateTimeInterface $birthDate): static
     {
         $this->birthDate = $birthDate;
 
         return $this;
     }
 
-    public function getPicture()
+    public function getPicture(): ?string
     {
         return $this->picture;
     }
 
-    public function setPicture($picture): static
+    public function setPicture(?string $picture): static
     {
         $this->picture = $picture;
 
         return $this;
     }
 
-    public function getPseudo(): ?string
+    /**
+     * @return Collection<int, Review>
+     */
+    public function getReview(): Collection
     {
-        return $this->pseudo;
+        return $this->review;
     }
 
-    public function setPseudo(string $pseudo): static
+    public function addReview(Review $review): static
     {
-        $this->pseudo = $pseudo;
+        if (!$this->review->contains($review)) {
+            $this->review->add($review);
+            $review->setUser($this);
+        }
 
         return $this;
+    }
+
+    public function removeReview(Review $review): static
+    {
+        if ($this->review->removeElement($review)) {
+            // set the owning side to null (unless already changed)
+            if ($review->getUser() === $this) {
+                $review->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Car>
+     */
+    public function getCars(): Collection
+    {
+        return $this->cars;
+    }
+
+    public function addCar(Car $car): static
+    {
+        if (!$this->cars->contains($car)) {
+            $this->cars->add($car);
+            $car->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCar(Car $car): static
+    {
+        if ($this->cars->removeElement($car)) {
+            // set the owning side to null (unless already changed)
+            if ($car->getUser() === $this) {
+                $car->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Trip>
+     */
+    public function getTrips(): Collection
+    {
+        return $this->trips;
+    }
+
+    public function addTrip(Trip $trip): static
+    {
+        if (!$this->trips->contains($trip)) {
+            $this->trips->add($trip);
+        }
+
+        return $this;
+    }
+
+    public function removeTrip(Trip $trip): static
+    {
+        $this->trips->removeElement($trip);
+
+        return $this;
+    }
+
+    public function getUsername():string{
+        return $this->getUserIdentifier();
     }
 }

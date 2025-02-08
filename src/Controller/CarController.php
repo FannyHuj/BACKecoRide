@@ -8,7 +8,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class CarController extends AbstractController
 {
-    #[Route('/car', name: 'app_car')]
+    #[Route('/api/car', name: 'app_car')]
     public function index(): Response
     {
         return $this->render('car/index.html.twig', [
