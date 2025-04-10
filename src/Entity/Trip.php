@@ -34,23 +34,21 @@ class Trip
     #[ORM\Column(length: 50)]
     private ?string $arrivalLocation = null;
 
-    #[ORM\Column(length: 50)]
-    private ?string $status = null;
+    #[ORM\Column(type: 'string', enumType: TripsStatusEnum::class)]
+    private ?TripsStatusEnum $status = null;
 
     #[ORM\Column]
     private ?int $placeNumber = null;
 
     #[ORM\Column]
-    private ?float $price = null;
+    private ?int $creditPrice = null;
 
     #[ORM\ManyToOne(targetEntity: Car::class)]
     private ?Car $car;
 
-    /**
-     * @var Collection<int, User>
-     */
-    #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'trips')]
-    private ?Collection $users;
+
+    #[ORM\OneToMany(targetEntity: UserTrip::class, cascade: ['persist'], mappedBy:'trip')]
+    private Collection $users;
 
     public function __construct()
     {
@@ -127,12 +125,12 @@ class Trip
         $this->arrivalLocation = $arrivalLocation;
     }
 
-    public function getStatus(): ?string
+    public function getStatus(): ?TripsStatusEnum
     {
         return $this->status;
     }
 
-    public function setStatus(?string $status): void
+    public function setStatus(?TripsStatusEnum $status): void
     {
         $this->status = $status;
     }
@@ -147,14 +145,14 @@ class Trip
         $this->placeNumber = $placeNumber;
     }
 
-    public function getPrice(): ?float
+    public function getcreditPrice(): ?int
     {
-        return $this->price;
+        return $this->creditPrice;
     }
 
-    public function setPrice(?float $price): void
+    public function setcreditPrice(?int $creditPrice): void
     {
-        $this->price = $price;
+        $this->creditPrice = $creditPrice;
     }
 
     public function getCar(): ?Car
@@ -167,32 +165,27 @@ class Trip
         $this->car = $car;
     }
 
+    /**
+     * @return Collection<int, User>
+     */
     public function getUsers(): Collection
     {
         return $this->users;
     }
 
-    public function setUsers(Collection $users): void
+    public function addUser(UserTrip $userTrip): self
     {
-        $this->users = $users;
+            if (!$this->users->contains($userTrip)) {
+                $this->users->add($userTrip);
+                $userTrip->setTrip($this); // Maintient la cohérence de la relation bidirectionnelle
+            }
+
+            return $this;
     }
 
-
-    public function addUser(User $user): static
+    public function removeUsers(User $users): static
     {
-        if (!$this->users->contains($user)) {
-            $this->users->add($user);
-            $user->addTrip($this);
-        }
-
-        return $this;
-    }
-
-    public function removeUser(User $user): static
-    {
-        if ($this->users->removeElement($user)) {
-            $user->removeTrip($this);
-        }
+        $this->users->removeElement($users);
 
         return $this;
     }

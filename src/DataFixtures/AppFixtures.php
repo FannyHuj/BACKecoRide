@@ -24,6 +24,14 @@ class AppFixtures extends Fixture
         $user->setEmail("user@ecoride.com");
         $user->setRoles(["ROLE_USER"]);
         $user->setPassword($this->userPasswordHasher->hashPassword($user, "password"));
+        $user->setCredit(20);
+        $manager->persist($user);
+
+        $user = new User();
+        $user->setEmail("alice@ecoride.com");
+        $user->setRoles(["ROLE_USER"]);
+        $user->setPassword($this->userPasswordHasher->hashPassword($user, "password"));
+        $user->setCredit(20);
         $manager->persist($user);
 
 // Création d'un user admin
@@ -31,6 +39,7 @@ class AppFixtures extends Fixture
         $userAdmin->setEmail("admin@ecoride.com");
         $userAdmin->setRoles(["ROLE_ADMIN"]);
         $userAdmin->setPassword($this->userPasswordHasher->hashPassword($userAdmin, "password"));
+        $userAdmin->setCredit(20);
         $manager->persist($userAdmin);
 
         $manager->flush();

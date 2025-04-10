@@ -52,6 +52,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $picture = null;
 
+    #[ORM\Column]
+    private ?int $credit=null;
     /**
      * @var Collection<int, Review>
      */
@@ -67,19 +69,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @var Collection<int, Trip>
      */
-    #[ORM\ManyToMany(targetEntity: Trip::class, inversedBy: 'users')]
+    #[ORM\OneToMany(targetEntity: UserTrip::class, mappedBy: 'user')]
     private Collection $trips;
+
+    /**
+     * @var Collection<int, Trip>
+     */
+    #[ORM\OneToMany(targetEntity: Trip::class, mappedBy: 'driver')]
+    private Collection $tripsOwner;
+
+   
 
     public function __construct()
     {
         $this->review = new ArrayCollection();
         $this->cars = new ArrayCollection();
         $this->trips = new ArrayCollection();
+        $this->tripsOwner = new ArrayCollection();
+        
     }
 
     public function getId(): ?int
     {
         return $this->id;
+        
     }
 
     public function getEmail(): ?string
@@ -310,5 +323,33 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function getUsername():string{
         return $this->getUserIdentifier();
+    }
+
+    /**
+     * @return Collection<int, Trip>
+     */
+    public function getTripsOwner(): Collection
+    {
+        return $this->tripsOwner;
+    }
+
+    /**
+     * Get the value of credit
+     */ 
+    public function getCredit()
+    {
+        return $this->credit;
+    }
+
+    /**
+     * Set the value of credit
+     *
+     * @return  self
+     */ 
+    public function setCredit($credit)
+    {
+        $this->credit = $credit;
+
+        return $this;
     }
 }

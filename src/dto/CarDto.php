@@ -1,0 +1,158 @@
+<?php
+
+namespace App\dto;
+
+use App\Entity\Brand;
+use App\Entity\User;
+
+Class CarDto {
+
+    private ?string $model = null;
+    private ?string $registration = null;
+    private ?string $energy = null;
+    private ?string $color = null;
+    private ?string $firstRegistrationDate = null;
+    private Brand $brand;
+    private ?User $user = null;
+
+
+    /**
+     * Get the value of model
+     */ 
+    public function getModel()
+    {
+        return $this->model;
+    }
+
+    /**
+     * Set the value of model
+     *
+     * @return  self
+     */ 
+    public function setModel($model)
+    {
+        $this->model = $model;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of registration
+     */ 
+    public function getRegistration()
+    {
+        return $this->registration;
+    }
+
+    /**
+     * Set the value of registration
+     *
+     * @return  self
+     */ 
+    public function setRegistration($registration)
+    {
+        $this->registration = $registration;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of energy
+     */ 
+    public function getEnergy()
+    {
+        return $this->energy;
+    }
+
+    /**
+     * Set the value of energy
+     *
+     * @return  self
+     */ 
+    public function setEnergy($energy)
+    {
+        $this->energy = $energy;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of color
+     */ 
+    public function getColor()
+    {
+        return $this->color;
+    }
+
+    /**
+     * Set the value of color
+     *
+     * @return  self
+     */ 
+    public function setColor($color)
+    {
+        $this->color = $color;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of firstRegistrationDate
+     */ 
+    public function getFirstRegistrationDate()
+    {
+        return $this->firstRegistrationDate;
+    }
+
+    /**
+     * Set the value of firstRegistrationDate
+     *
+     * @return  self
+     */ 
+    public function setFirstRegistrationDate($firstRegistrationDate)
+    {
+        $this->firstRegistrationDate = $firstRegistrationDate;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of brand
+     */ 
+    public function getBrand()
+    {
+        return $this->brand;
+    }
+
+    /**
+     * Set the value of brand
+     *
+     * @return  self
+     */ 
+    public function setBrand($brand)
+    {
+        $this->brand = $brand;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of user
+     */ 
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    /**
+     * Set the value of user
+     *
+     * @return  self
+     */ 
+    public function setUser($user)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+}

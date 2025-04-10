@@ -17,7 +17,7 @@ class Review
     private ?string $comment = null;
 
     #[ORM\Column(length: 50, nullable: true)]
-    private ?string $notation = null;
+    private ?int $notation = null;
 
     #[ORM\Column(length: 50, nullable: true)]
     private ?string $status = null;
@@ -25,8 +25,9 @@ class Review
     #[ORM\ManyToOne(inversedBy: 'review')]
     private ?User $user = null;
 
+    #[ORM\ManyToOne]
+    private ?Trip $trip = null;
 
-    
     public function getId(): ?int
     {
         return $this->id;
@@ -44,12 +45,12 @@ class Review
         return $this;
     }
 
-    public function getNotation(): ?string
+    public function getNotation(): ?int
     {
         return $this->notation;
     }
 
-    public function setNotation(?string $notation): static
+    public function setNotation(?int $notation): static
     {
         $this->notation = $notation;
 
@@ -76,6 +77,18 @@ class Review
     public function setUser(?User $user): static
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getTrip(): ?Trip
+    {
+        return $this->trip;
+    }
+
+    public function setTrip(?Trip $trip): static
+    {
+        $this->trip = $trip;
 
         return $this;
     }
