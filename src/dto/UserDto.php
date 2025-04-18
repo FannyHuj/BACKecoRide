@@ -4,6 +4,7 @@ namespace App\dto;
 
 Class UserDto {
 
+    private ?int $id = null;
     private ?string $email = null;
     private array $roles = [];
     private ?string $password = null;
@@ -191,6 +192,26 @@ Class UserDto {
     public function setPicture($picture)
     {
         $this->picture = $picture;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of id
+     */ 
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set the value of id
+     *
+     * @return  self
+     */ 
+    public function setId($id)
+    {
+        $this->id = $id;
 
         return $this;
     }

@@ -4,6 +4,7 @@ namespace App\dto;
 use App\Entity\TripsStatusEnum;
 
 Class TripFullDto {
+    private ?int $id = null;
     private ?\DateTimeInterface $departDate = null;
     private ?\DateTimeInterface $departHour = null;
     private ?string $departLocation = null;
@@ -13,8 +14,29 @@ Class TripFullDto {
     private ?TripsStatusEnum $status =null;
     private ?int $placeNumber = null;
     private ?int $creditPrice = null;
-    private ?int $carId;
-    private ?int $userId;
+    private ?CarMinDto $car;
+    private ?UserDtoMin $driver;
+
+    
+    /**
+     * Get the value of id
+     */ 
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set the value of id
+     *
+     * @return  self
+     */ 
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
 
     /**
      * Get the value of departDate
@@ -194,44 +216,44 @@ Class TripFullDto {
         $this->creditPrice = $creditPrice;
 
         return $this;
-    }
+    } 
 
     /**
-     * Get the value of carId
+     * Get the value of driver
      */ 
-    public function getCarId()
+    public function getDriver()
     {
-        return $this->carId;
+        return $this->driver;
     }
 
     /**
-     * Set the value of carId
+     * Set the value of driver
      *
      * @return  self
      */ 
-    public function setCarId($carId)
+    public function setDriver($driver)
     {
-        $this->carId = $carId;
+        $this->driver = $driver;
 
         return $this;
     }
 
     /**
-     * Get the value of usersId
+     * Get the value of car
      */ 
-    public function getUserId()
+    public function getCar()
     {
-        return $this->userId;
+        return $this->car;
     }
 
     /**
-     * Set the value of usersId
+     * Set the value of car
      *
      * @return  self
      */ 
-    public function setUsersId($userId)
+    public function setCar($car)
     {
-        $this->userId = $userId;
+        $this->car = $car;
 
         return $this;
     }

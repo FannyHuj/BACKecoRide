@@ -8,16 +8,17 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Attribute\Route;
 use App\Entity\Trip;
-use App\Entity\TripsStatusEnum;
 use App\Entity\User;
 use App\Entity\UserTrip;
 use App\Repository\UserTripRepository;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\SerializerInterface;
 use App\dto\TripFullDto;
+use App\dto\UserDtoMin;
 use App\dtoConverter\TripFullDtoConverter;
 use App\Repository\CarRepository;
 use App\Repository\UserRepository;
+use Symfony\Component\Mailer\MailerInterface;
 
 class TripController extends AbstractController
 {
@@ -27,15 +28,14 @@ class TripController extends AbstractController
                             $convert=new TripFullDtoConverter();
 
                             $trip=$convert->converterToEntity($tripDto);
-                            $car= $carRepository->findCarById($tripDto->getCarId());
-                            $user= $userRepository->findUserById($tripDto->getUserId());
-                            $trip->setStatus(TripsStatusEnum::Coming->label);
+                            $car= $carRepository->findCarById($tripDto->getCar()->getId());
+                            $user= $userRepository->findUserById($tripDto->getDriver()->getId());
                             $trip->setCar($car);
                            
                             $ut=new UserTrip();
                             $ut->setTrip($trip);
                             $ut->setUser($user);
-                            $ut->isDriver(true);
+                            $ut->setDriver(true);
 
                             $trip->addUser($ut);
                             $tripRepository->save($trip);
@@ -50,24 +50,27 @@ class TripController extends AbstractController
     #[Route('/api/trip/{id}')]
     public function show (TripRepository $repository,$id): JsonResponse{
 
-        $tripDetails= $repository->findTripById($id);
-
-        return $this->json($tripDetails, 200, [], ['json_encode_options' => JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES]);
+        $trip= $repository->findTripById($id);
+        $convert=new TripFullDtoConverter();
+       
+        $tripDto=$convert->converterToDto($trip);
+        return $this->json($tripDto, 200, [], ['json_encode_options' => JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES]);
     }
 
 
-    #[Route('/api/trip/{id}/addPassenger', methods:['POST'])]
-    public function addPassenger ($id, #[MapRequestPayload]  User $user,TripRepository $repository, UserTripRepository $utRepository): JsonResponse{
+    #[Route('/api/booking/trip/{id}/user/{userId}', methods:['POST'])]
+    public function booking ($id, $userId, TripRepository $repository, UserRepository $userRepository): JsonResponse{
 
          $trip= $repository->findTripById($id);
+         $user=$userRepository->findUserById($userId);
 
          $ut=new UserTrip();
          $ut->setTrip($trip);
          $ut->setUser($user);
-         $ut->setRole('P');
+         $ut->setDriver(false);
 
-         $trip->placeNumber=$trip->placeNumber-1;
-         $trip->users->push($ut);
+         $trip->setPlaceNumber($trip->getPlaceNumber()-1);
+         $trip->getUsers()->add($ut);
 
          $repository-> save($trip);
 
@@ -90,5 +93,22 @@ class TripController extends AbstractController
          
         return $this->json($dtoList, 200, [], ['json_encode_options' => JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES]);
 
+    }
+
+    
+    #[Route('/api/cancel/trip/{id}', methods:['PUT'])]
+    public function cancel ($id, TripRepository $tripRepository, MailerInterface $mailer):JsonResponse{
+
+        $tripRepository->cancel($id,$mailer);
+
+        return $this->json(['status' => 'success']);
+    }
+
+    #[Route('/api/removePassenger/trip/{tripId}/user/{id}', methods: ['PUT'])]
+    public function removePassenger(int $tripId, int $id, TripRepository $tripRepository): JsonResponse
+    {
+        $tripRepository->removePassenger($tripId, $id);
+    
+        return $this->json(['status' => 'success']);
     }
 }

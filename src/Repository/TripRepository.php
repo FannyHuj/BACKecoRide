@@ -5,12 +5,16 @@ namespace App\Repository;
 use App\Entity\Trip;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use App\Entity\TripsStatusEnum;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 
 /**
  * @extends ServiceEntityRepository<Trip>
  */
 class TripRepository extends ServiceEntityRepository
 {
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Trip::class);
@@ -49,18 +53,29 @@ class TripRepository extends ServiceEntityRepository
         $query = $qb->getQuery();
         return $query->execute();
     }
+
+    public function cancel ($id, MailerInterface $mailer){
+        $trip=$this->findTripById($id);
+        $trip->setStatus(TripsStatusEnum::Canceled);
+        $this->getEntityManager()->flush();
+
+        $email = (new Email())
+       ->from('didierdeschamps@example.com')
+       ->to('hujman.fanny@gmail.com')
+       ->subject('Coupe du monde')
+       ->text('vous êtes invité à la prochaine coupe du monde');
+   $mailer->send($email);
+    }
+
+    public function removePassenger($tripId, $userId){
+        $trip=$this->findTripById($tripId);
+        $userTripAssociated = $trip->getUsers()->filter(function ($userTrip) use ($userId) {
+            return $userTrip->getUser()->getId()== $userId;
+        });
+        $trip->getUsers()->remove($userTripAssociated);
+        $this->getEntityManager()->flush();
+    }
 }
-
-
-
-
-
-
-
-
-
-
-
 
     //    /**
     //     * @return Trip[] Returns an array of Trip objects

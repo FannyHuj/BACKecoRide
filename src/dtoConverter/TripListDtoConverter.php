@@ -34,7 +34,7 @@ class TripListDtoConverter {
 
     private function getDriver($trip){
         foreach($trip->getUsers() as $userTrip){
-            if($userTrip->isDriver()){
+            if($userTrip->isDriver()){ 
                 return $userTrip->getUser();
             }
         }

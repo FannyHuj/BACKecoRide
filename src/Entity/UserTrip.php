@@ -46,16 +46,24 @@ class UserTrip
         return $this;
     }
 
-    public function isDriver(): ?bool
+  
+    /**
+     * Get the value of driver
+     */ 
+    public function getDriver()
     {
         return $this->driver;
     }
 
-    public function setDriver(bool $role): static
+    /**
+     * Set the value of driver
+     *
+     * @return  self
+     */ 
+    public function setDriver($driver)
     {
-        $this->driver = $role;
+        $this->driver = $driver;
 
         return $this;
     }
-
 }
