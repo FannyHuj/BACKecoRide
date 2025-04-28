@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\dto\SearchDto;
 use App\Entity\Trip;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -38,17 +39,20 @@ class TripRepository extends ServiceEntityRepository
         return $this->find($id);
     }
 
-    public function search(Trip $trip){
+    public function search(SearchDto $searchDto){
 
         $qb = $this->createQueryBuilder('trip')
             -> where('trip.placeNumber >= :placeNumber')
             -> andWhere('trip.departLocation = :departLocation')
             -> andWhere('trip.arrivalLocation = :arrivalLocation')
-            -> andWhere('trip.departDate = :departDate')
-            ->setParameter ('departLocation', $trip->getDepartLocation())
-            ->setParameter('placeNumber', $trip->getPlaceNumber())
-            ->setParameter('arrivalLocation', $trip->getArrivalLocation())
-            ->setParameter ('departDate', $trip->getDepartDate());
+            -> andWhere('trip.departDate >= :departDate')
+            -> andWhere('trip.status=:status')
+            ->setParameter ('departLocation', $searchDto->getDepartLocation())
+            ->setParameter('placeNumber', $searchDto->getPlaceNumber())
+            ->setParameter('arrivalLocation', $searchDto->getArrivalLocation())
+            ->setParameter ('departDate', $searchDto->getDepartDate())
+            ->setParameter ('status', TripsStatusEnum::Coming);
+
 
         $query = $qb->getQuery();
         return $query->execute();
@@ -74,6 +78,22 @@ class TripRepository extends ServiceEntityRepository
         });
         $trip->getUsers()->remove($userTripAssociated);
         $this->getEntityManager()->flush();
+    }
+
+    public function findAllTrip(){
+        return $this->findAll();
+    }
+
+    public function totalCredit(){
+        
+    }
+
+    public function tripsPerDay(){
+
+    }
+
+    public function creditsPerDay(){
+        
     }
 }
 

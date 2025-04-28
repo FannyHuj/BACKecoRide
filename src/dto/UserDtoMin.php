@@ -2,12 +2,15 @@
 
 namespace App\dto;
 
+use App\Entity\Review;
+
 Class UserDtoMin {
 
     private ?int $id = null;
     private ?string $lastName = null;
     private ?string $firstName = null;
     private ?string $picture = null;
+    private ?int $notation = null;
 
     /**
      * Get the value of id
@@ -85,6 +88,26 @@ Class UserDtoMin {
     public function setPicture($picture)
     {
         $this->picture = $picture;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of notation
+     */ 
+    public function getNotation()
+    {
+        return $this->notation;
+    }
+
+    /**
+     * Set the value of notation
+     *
+     * @return  self
+     */ 
+    public function setNotation($notation)
+    {
+        $this->notation = $notation;
 
         return $this;
     }

@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\dto\SearchDto;
 use App\dtoConverter\TripListDtoConverter;
 use App\Repository\TripRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -18,6 +19,8 @@ use App\dto\UserDtoMin;
 use App\dtoConverter\TripFullDtoConverter;
 use App\Repository\CarRepository;
 use App\Repository\UserRepository;
+use App\services\TripService;
+use DateTime;
 use Symfony\Component\Mailer\MailerInterface;
 
 class TripController extends AbstractController
@@ -68,6 +71,7 @@ class TripController extends AbstractController
          $ut->setTrip($trip);
          $ut->setUser($user);
          $ut->setDriver(false);
+         $ut->setBookingDate(new DateTime());
 
          $trip->setPlaceNumber($trip->getPlaceNumber()-1);
          $trip->getUsers()->add($ut);
@@ -79,11 +83,11 @@ class TripController extends AbstractController
 
 
     #[Route('/api/searchTrip', methods:['POST'])]
-    public function search (#[MapRequestPayload]  Trip $trip, // Le service ANGULAR appelle cette méthode et lui envoie une interface trip Map va transformer cette interface en une entité php $trip
-                         TripRepository $tripRepository):JsonResponse{
-         $trips = $tripRepository->search ($trip);
+    public function search (#[MapRequestPayload]  SearchDto $searchDto, // Le service ANGULAR appelle cette méthode et lui envoie une interface trip Map va transformer cette interface en une entité php $trip
+                         TripRepository $tripRepository,TripService $tripService):JsonResponse{
+         $trips = $tripRepository->search ($searchDto);
 
-         $convert=new TripListDtoConverter();
+         $convert=new TripListDtoConverter($tripService);
 
          $dtoList = [];
 
@@ -110,5 +114,20 @@ class TripController extends AbstractController
         $tripRepository->removePassenger($tripId, $id);
     
         return $this->json(['status' => 'success']);
+    }
+
+    #[Route('/api/admin/TripHistoric')]
+    public function showHistoric (TripRepository $repository, TripService $tripService): JsonResponse{
+
+        $trips= $repository->findAllTrip();
+
+        $convert=new TripListDtoConverter($tripService);
+        $dtoList = [];
+
+        foreach($trips as $trip){
+            array_push($dtoList, $convert->converterToDto($trip));
+        }
+
+        return $this->json($dtoList, 200, [], ['json_encode_options' => JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES]);
     }
 }

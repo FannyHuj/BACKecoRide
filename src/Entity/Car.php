@@ -19,8 +19,8 @@ class Car
     #[ORM\Column(length: 50)]
     private ?string $registration = null;
 
-    #[ORM\Column(length: 50)]
-    private ?string $energy = null;
+    #[ORM\Column(length: 50, enumType:EnergyEnum::class)]
+    private ?EnergyEnum $energy = null;
 
     #[ORM\Column(length: 50)]
     private ?string $color = null;
@@ -73,18 +73,6 @@ class Car
         return $this;
     }
 
-    public function getEnergy(): ?string
-    {
-        return $this->energy;
-    }
-
-    public function setEnergy(string $energy): static
-    {
-        $this->energy = $energy;
-
-        return $this;
-    }
-
     public function getColor(): ?string
     {
         return $this->color;
@@ -117,6 +105,26 @@ class Car
     public function setUser(?User $user): static
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of energy
+     */ 
+    public function getEnergy()
+    {
+        return $this->energy;
+    }
+
+    /**
+     * Set the value of energy
+     *
+     * @return  self
+     */ 
+    public function setEnergy($energy)
+    {
+        $this->energy = $energy;
 
         return $this;
     }

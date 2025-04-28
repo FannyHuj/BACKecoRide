@@ -5,6 +5,7 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use App\Entity\User;
 use App\Entity\Trip;
+use Doctrine\DBAL\Types\Types;
 
 #[ORM\Entity]
 class UserTrip
@@ -20,6 +21,9 @@ class UserTrip
 
     #[ORM\Column]
     private ?bool $driver=null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    private ?\DateTimeInterface $bookingDate = null;
 
 
    public function getUser(): ?User
@@ -63,6 +67,26 @@ class UserTrip
     public function setDriver($driver)
     {
         $this->driver = $driver;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of bookingDate
+     */ 
+    public function getBookingDate()
+    {
+        return $this->bookingDate;
+    }
+
+    /**
+     * Set the value of bookingDate
+     *
+     * @return  self
+     */ 
+    public function setBookingDate($bookingDate)
+    {
+        $this->bookingDate = $bookingDate;
 
         return $this;
     }

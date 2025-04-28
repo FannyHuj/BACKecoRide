@@ -2,14 +2,19 @@
 
 namespace App\dto;
 
-Class TripListDto {
-    private ?\DateTimeInterface $departDate =null;
-    private ?\DateTimeInterface $departHour = null;
-    private ?\DateTimeInterface $arrivalHour = null;
-    private ?string $driverFirstName = null;
-    private ?int $notation = null; 
-    private ?int $creditPrice = null;
+use App\dto\UserDtoMin;
 
+Class TripListDto {
+    
+    private ?int $id = null;
+    private ?\DateTimeInterface $departDate =null;
+    private ?\DateTimeInterface $arrivalDate = null;
+    private ?int $creditPrice = null;
+    private ?UserDtoMin $user = null;
+    private ?CarMinDto $car = null;
+    private ?int $placeNumber = null;
+    private ?string $departLocation = null;
+    private ?string $arrivalLocation = null;
 
     /**
      * Get the value of departDate
@@ -32,86 +37,6 @@ Class TripListDto {
     }
 
     /**
-     * Get the value of departHour
-     */ 
-    public function getDepartHour()
-    {
-        return $this->departHour;
-    }
-
-    /**
-     * Set the value of departHour
-     *
-     * @return  self
-     */ 
-    public function setDepartHour($departHour)
-    {
-        $this->departHour = $departHour;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of arrivalHour
-     */ 
-    public function getArrivalHour()
-    {
-        return $this->arrivalHour;
-    }
-
-    /**
-     * Set the value of arrivalHour
-     *
-     * @return  self
-     */ 
-    public function setArrivalHour($arrivalHour)
-    {
-        $this->arrivalHour = $arrivalHour;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of driverFirstName
-     */ 
-    public function getDriverFirstName()
-    {
-        return $this->driverFirstName;
-    }
-
-    /**
-     * Set the value of driverFirstName
-     *
-     * @return  self
-     */ 
-    public function setDriverFirstName($driverFirstName)
-    {
-        $this->driverFirstName = $driverFirstName;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of notation
-     */ 
-    public function getNotation()
-    {
-        return $this->notation;
-    }
-
-    /**
-     * Set the value of notation
-     *
-     * @return  self
-     */ 
-    public function setNotation($notation)
-    {
-        $this->notation = $notation;
-
-        return $this;
-    }
-
-    /**
      * Get the value of creditPrice
      */ 
     public function getCreditPrice()
@@ -127,6 +52,146 @@ Class TripListDto {
     public function setCreditPrice($creditPrice)
     {
         $this->creditPrice = $creditPrice;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of arrivalDate
+     */ 
+    public function getArrivalDate()
+    {
+        return $this->arrivalDate;
+    }
+
+    /**
+     * Set the value of arrivalDate
+     *
+     * @return  self
+     */ 
+    public function setArrivalDate($arrivalDate)
+    {
+        $this->arrivalDate = $arrivalDate;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of placeNumber
+     */ 
+    public function getPlaceNumber()
+    {
+        return $this->placeNumber;
+    }
+
+    /**
+     * Set the value of placeNumber
+     *
+     * @return  self
+     */ 
+    public function setPlaceNumber($placeNumber)
+    {
+        $this->placeNumber = $placeNumber;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of user
+     */ 
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    /**
+     * Set the value of user
+     *
+     * @return  self
+     */ 
+    public function setUser($user)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of car
+     */ 
+    public function getCar()
+    {
+        return $this->car;
+    }
+
+    /**
+     * Set the value of car
+     *
+     * @return  self
+     */ 
+    public function setCar($car)
+    {
+        $this->car = $car;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of departLocation
+     */ 
+    public function getDepartLocation()
+    {
+        return $this->departLocation;
+    }
+
+    /**
+     * Set the value of departLocation
+     *
+     * @return  self
+     */ 
+    public function setDepartLocation($departLocation)
+    {
+        $this->departLocation = $departLocation;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of arrivalLocation
+     */ 
+    public function getArrivalLocation()
+    {
+        return $this->arrivalLocation;
+    }
+
+    /**
+     * Set the value of arrivalLocation
+     *
+     * @return  self
+     */ 
+    public function setArrivalLocation($arrivalLocation)
+    {
+        $this->arrivalLocation = $arrivalLocation;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of id
+     */ 
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set the value of id
+     *
+     * @return  self
+     */ 
+    public function setId($id)
+    {
+        $this->id = $id;
 
         return $this;
     }

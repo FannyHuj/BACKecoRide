@@ -38,6 +38,9 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         return $this->find($id);
     }
 
+    public function totalUser(){
+
+    }
 
     //    /**
     //     * @return User[] Returns an array of User objects

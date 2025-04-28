@@ -6,10 +6,8 @@ use App\Entity\TripsStatusEnum;
 Class TripFullDto {
     private ?int $id = null;
     private ?\DateTimeInterface $departDate = null;
-    private ?\DateTimeInterface $departHour = null;
     private ?string $departLocation = null;
     private ?\DateTimeInterface $arrivalDate = null;
-    private ?\DateTimeInterface $arrivalHour = null;
     private ?string $arrivalLocation = null;
     private ?TripsStatusEnum $status =null;
     private ?int $placeNumber = null;
@@ -58,25 +56,8 @@ Class TripFullDto {
         return $this;
     }
 
-    /**
-     * Get the value of departHour
-     */ 
-    public function getDepartHour()
-    {
-        return $this->departHour;
-    }
-
-    /**
-     * Set the value of departHour
-     *
-     * @return  self
-     */ 
-    public function setDepartHour($departHour)
-    {
-        $this->departHour = $departHour;
-
-        return $this;
-    }
+    
+    
 
     /**
      * Get the value of departLocation
@@ -114,26 +95,6 @@ Class TripFullDto {
     public function setArrivalDate($arrivalDate)
     {
         $this->arrivalDate = $arrivalDate;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of arrivalHour
-     */ 
-    public function getArrivalHour()
-    {
-        return $this->arrivalHour;
-    }
-
-    /**
-     * Set the value of arrivalHour
-     *
-     * @return  self
-     */ 
-    public function setArrivalHour($arrivalHour)
-    {
-        $this->arrivalHour = $arrivalHour;
 
         return $this;
     }

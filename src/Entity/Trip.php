@@ -16,20 +16,14 @@ class Trip
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $departDate = null;
-
-    #[ORM\Column(type: Types::TIME_MUTABLE)]
-    private ?\DateTimeInterface $departHour = null;
 
     #[ORM\Column(length: 50)]
     private ?string $departLocation = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $arrivalDate = null;
-
-    #[ORM\Column(type: Types::TIME_MUTABLE)]
-    private ?\DateTimeInterface $arrivalHour = null;
 
     #[ORM\Column(length: 50)]
     private ?string $arrivalLocation = null;
@@ -75,16 +69,6 @@ class Trip
         $this->departDate = $departDate;
     }
 
-    public function getDepartHour(): ?\DateTimeInterface
-    {
-        return $this->departHour;
-    }
-
-    public function setDepartHour(?\DateTimeInterface $departHour): void
-    {
-        $this->departHour = $departHour;
-    }
-
     public function getDepartLocation(): ?string
     {
         return $this->departLocation;
@@ -104,17 +88,7 @@ class Trip
     {
         $this->arrivalDate = $arrivalDate;
     }
-
-    public function getArrivalHour(): ?\DateTimeInterface
-    {
-        return $this->arrivalHour;
-    }
-
-    public function setArrivalHour(?\DateTimeInterface $arrivalHour): void
-    {
-        $this->arrivalHour = $arrivalHour;
-    }
-
+    
     public function getArrivalLocation(): ?string
     {
         return $this->arrivalLocation;
