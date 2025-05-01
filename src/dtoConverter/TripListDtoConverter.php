@@ -1,7 +1,6 @@
 <?php
 namespace App\dtoConverter;
 
-use App\dto\CarDto;
 use App\dto\TripListDto;
 use App\dto\UserDtoMin;
 use App\Entity\Trip;

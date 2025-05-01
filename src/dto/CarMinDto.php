@@ -2,11 +2,13 @@
 
 namespace App\dto;
 
+use App\Entity\EnergyEnum;
+
 Class CarMinDto {
     
     private ?int $id = null;
     private ?string $model = null;
-    private ?string $energy = null;
+    private ?EnergyEnum $energy = null;
     private ?string $color = null;
 
         /**
@@ -50,26 +52,6 @@ Class CarMinDto {
     }
 
     /**
-     * Get the value of energy
-     */ 
-    public function getEnergy()
-    {
-        return $this->energy;
-    }
-
-    /**
-     * Set the value of energy
-     *
-     * @return  self
-     */ 
-    public function setEnergy($energy)
-    {
-        $this->energy = $energy;
-
-        return $this;
-    }
-
-    /**
      * Get the value of color
      */ 
     public function getColor()
@@ -85,6 +67,26 @@ Class CarMinDto {
     public function setColor($color)
     {
         $this->color = $color;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of energy
+     */ 
+    public function getEnergy()
+    {
+        return $this->energy;
+    }
+
+    /**
+     * Set the value of energy
+     *
+     * @return  self
+     */ 
+    public function setEnergy($energy)
+    {
+        $this->energy = $energy;
 
         return $this;
     }

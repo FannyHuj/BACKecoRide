@@ -78,7 +78,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Trip::class, mappedBy: 'driver')]
     private Collection $tripsOwner;
 
-   
+    #[ORM\Column(type: 'boolean')]
+    private bool $active = true;
+
 
     public function __construct()
     {
@@ -349,6 +351,26 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setCredit($credit)
     {
         $this->credit = $credit;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of active
+     */ 
+    public function getActive()
+    {
+        return $this->active;
+    }
+
+    /**
+     * Set the value of active
+     *
+     * @return  self
+     */ 
+    public function setActive($active)
+    {
+        $this->active = $active;
 
         return $this;
     }

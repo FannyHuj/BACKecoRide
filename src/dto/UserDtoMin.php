@@ -11,6 +11,7 @@ Class UserDtoMin {
     private ?string $firstName = null;
     private ?string $picture = null;
     private ?int $notation = null;
+    private bool $isActive = true;
 
     /**
      * Get the value of id
@@ -108,6 +109,26 @@ Class UserDtoMin {
     public function setNotation($notation)
     {
         $this->notation = $notation;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of isActive
+     */ 
+    public function getIsActive()
+    {
+        return $this->isActive;
+    }
+
+    /**
+     * Set the value of isActive
+     *
+     * @return  self
+     */ 
+    public function setIsActive($isActive)
+    {
+        $this->isActive = $isActive;
 
         return $this;
     }

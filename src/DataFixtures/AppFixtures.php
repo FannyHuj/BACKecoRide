@@ -28,8 +28,11 @@ class AppFixtures extends Fixture
         $user = new User();
         $user->setEmail("user@ecoride.com");
         $user->setRoles(["ROLE_USER"]);
+        $user->setFirstName("Sébastien");
+        $user->setLastName("Philippot");
         $user->setPassword($this->userPasswordHasher->hashPassword($user, "password"));
         $user->setCredit(20);
+        $user->setActive(true);
         $manager->persist($user);
 
         $alice = new User();
@@ -37,6 +40,9 @@ class AppFixtures extends Fixture
         $alice->setRoles(["ROLE_USER"]);
         $alice->setPassword($this->userPasswordHasher->hashPassword($user, "password"));
         $alice->setCredit(20);
+        $alice->setActive(true);
+        $alice->setFirstName("Tom");
+        $alice->setLastName("Rider");
         $manager->persist($alice);
 
         $bob = new User();
@@ -44,6 +50,9 @@ class AppFixtures extends Fixture
         $bob->setRoles(["ROLE_USER"]);
         $bob->setPassword($this->userPasswordHasher->hashPassword($user, "password"));
         $bob->setCredit(20);
+        $bob->setActive(true);
+        $bob->setFirstName("Judith");
+        $bob->setLastName("Grimes");
         $manager->persist($bob);
 
 // Création d'un user admin
@@ -52,6 +61,9 @@ class AppFixtures extends Fixture
         $userAdmin->setRoles(["ROLE_ADMIN"]);
         $userAdmin->setPassword($this->userPasswordHasher->hashPassword($userAdmin, "password"));
         $userAdmin->setCredit(20);
+        $userAdmin->setActive(true);
+        $userAdmin->setFirstName("Carl");
+        $userAdmin->setLastName("Meyer");
         $manager->persist($userAdmin);
 
 

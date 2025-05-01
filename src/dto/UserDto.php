@@ -7,14 +7,33 @@ Class UserDto {
     private ?int $id = null;
     private ?string $email = null;
     private array $roles = [];
-    private ?string $password = null;
     private ?string $lastName = null;
     private ?string $firstName = null;
     private ?string $phoneNumber = null;
     private ?string $address = null;
     private ?\DateTimeInterface $birthDate = null;
     private ?string $picture = null;
+    private bool $active = true;
 
+     /**
+     * Get the value of id
+     */ 
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set the value of id
+     *
+     * @return  self
+     */ 
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
 
     /**
      * Get the value of email
@@ -52,26 +71,6 @@ Class UserDto {
     public function setRoles($roles)
     {
         $this->roles = $roles;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of password
-     */ 
-    public function getPassword()
-    {
-        return $this->password;
-    }
-
-    /**
-     * Set the value of password
-     *
-     * @return  self
-     */ 
-    public function setPassword($password)
-    {
-        $this->password = $password;
 
         return $this;
     }
@@ -196,22 +195,23 @@ Class UserDto {
         return $this;
     }
 
+
     /**
-     * Get the value of id
+     * Get the value of active
      */ 
-    public function getId()
+    public function getActive()
     {
-        return $this->id;
+        return $this->active;
     }
 
     /**
-     * Set the value of id
+     * Set the value of active
      *
      * @return  self
      */ 
-    public function setId($id)
+    public function setActive($active)
     {
-        $this->id = $id;
+        $this->active = $active;
 
         return $this;
     }

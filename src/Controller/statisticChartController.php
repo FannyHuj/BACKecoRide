@@ -12,7 +12,7 @@ class statisticChartController extends AbstractController
 
 {
 
-    #[Route('/api/covoiturages/per-day', methods: ['GET'])]
+    #[Route('/api/covoiturages/trip-per-day', methods: ['GET'])]
     
     public function tripsPerDay(TripService $service): JsonResponse
     {
@@ -21,11 +21,7 @@ class statisticChartController extends AbstractController
 
         // Exemple de données statiques
         
-
-        return $this->json([
-            'days' => $statisticDto->getDay(),
-            'counts' => $statisticDto->getTripsPerDay(),
-        ]);
+        return $this->json($statisticDto, 200, [], ['json_encode_options' => JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES]);
     }
 
 }
