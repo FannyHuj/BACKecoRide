@@ -8,8 +8,7 @@ use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use App\Entity\TripsStatusEnum;
-use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Mime\Email;
+
 
 /**
  * @extends ServiceEntityRepository<Trip>
@@ -64,12 +63,7 @@ class TripRepository extends ServiceEntityRepository
         $trip->setStatus(TripsStatusEnum::Canceled);
         $this->getEntityManager()->flush();
 
-        $email = (new Email())
-       ->from('didierdeschamps@example.com')
-       ->to('hujman.fanny@gmail.com')
-       ->subject('Coupe du monde')
-       ->text('vous êtes invité à la prochaine coupe du monde');
-   $mailer->send($email);
+       
     }
 
     public function removePassenger($tripId, $userId){
@@ -105,6 +99,12 @@ class TripRepository extends ServiceEntityRepository
             ->setParameter('user', $user)
             ->getQuery()
             ->getResult();
+    }
+
+    public function terminateTrip(int $tripId){
+        $trip= $this->findTripById($tripId);
+        $trip->setStatus(TripsStatusEnum::Done);
+        $this->getEntityManager()->flush();
     }
 }
 

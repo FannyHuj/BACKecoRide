@@ -39,6 +39,7 @@ class TripListDtoConverter {
         $tripListDto -> setStatus($trip-> getStatus());
 
         $user=new UserDtoMin();
+        $user->setId($driver->getId());
         $user -> setFirstName($driver->getFirstName());
         $user -> setLastName($driver->getLastName());
         $user -> setPicture($driver->getPicture());
@@ -51,7 +52,7 @@ class TripListDtoConverter {
         $car -> setColor($trip->getCar()-> getColor());
 
         $tripListDto->setCar($car);
-        $tripListDto->setUser($user);
+        $tripListDto->setDriver($user);
 
       
         return $tripListDto;

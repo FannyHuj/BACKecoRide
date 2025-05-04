@@ -15,6 +15,7 @@ use App\dtoConverter\TripFullDtoConverter;
 use App\Repository\CarRepository;
 use App\Repository\UserRepository;
 use App\services\TripService;
+use App\services\EmailService;
 use DateTime;
 use Symfony\Component\Mailer\MailerInterface;
 
@@ -140,4 +141,12 @@ class TripController extends AbstractController
 
         return $this->json($dtoList, 200, [], ['json_encode_options' => JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES]);
     }
+
+    #[Route('/api/terminate/{tripId}')]
+    public function terminateTrip (TripRepository $repository,EmailService $emailService,int $tripId): JsonResponse{
+       // $repository-> terminateTrip($tripId);
+        $emailService->sendEmail("le contenu","le sujet", "test@example.com");
+        return $this->json(['status' => 'success']);
+    }
+
 }

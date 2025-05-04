@@ -11,7 +11,7 @@ Class TripListDto {
     private ?\DateTimeInterface $departDate =null;
     private ?\DateTimeInterface $arrivalDate = null;
     private ?int $creditPrice = null;
-    private ?UserDtoMin $user = null;
+    private ?UserDtoMin $driver = null;
     private ?CarMinDto $car = null;
     private ?int $placeNumber = null;
     private ?string $departLocation = null;
@@ -98,25 +98,7 @@ Class TripListDto {
         return $this;
     }
 
-    /**
-     * Get the value of user
-     */ 
-    public function getUser()
-    {
-        return $this->user;
-    }
-
-    /**
-     * Set the value of user
-     *
-     * @return  self
-     */ 
-    public function setUser($user)
-    {
-        $this->user = $user;
-
-        return $this;
-    }
+   
 
     /**
      * Get the value of car
@@ -214,6 +196,26 @@ Class TripListDto {
     public function setStatus($status)
     {
         $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of driver
+     */ 
+    public function getDriver()
+    {
+        return $this->driver;
+    }
+
+    /**
+     * Set the value of driver
+     *
+     * @return  self
+     */ 
+    public function setDriver($driver)
+    {
+        $this->driver = $driver;
 
         return $this;
     }
