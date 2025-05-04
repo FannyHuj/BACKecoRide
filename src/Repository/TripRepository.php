@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\dto\SearchDto;
 use App\Entity\Trip;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use App\Entity\TripsStatusEnum;
@@ -94,6 +95,16 @@ class TripRepository extends ServiceEntityRepository
 
     public function creditsPerDay(){
         
+    }
+
+    public function findTripsByUser(User $user): array
+    {
+        return $this->createQueryBuilder('trip')
+            ->innerJoin('trip.users', 'ut')
+            ->andWhere('ut.user = :user')
+            ->setParameter('user', $user)
+            ->getQuery()
+            ->getResult();
     }
 }
 

@@ -26,7 +26,7 @@ class UserController extends AbstractController
     }
     
 
-    #[Route('/api/admin/getAllUsers')]
+    #[Route('/api/getAllUsers')]
     public function getAllUsers (UserRepository $userRepository): JsonResponse{
 
         $users= $userRepository->findAllUsers();
@@ -59,6 +59,19 @@ class UserController extends AbstractController
 
     $userDto=$convert->converterToDto($user);
     $user->setActive(false);
+    $userRepository->save($user);
+
+    return $this->json($userDto, 200, [], ['json_encode_options' => JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES]);
+    }
+
+    #[Route('/api/user/reactivate/{id}', methods: ['PUT'])]
+    public function reactivateMember($id, UserRepository $userRepository): JsonResponse {
+    $user = $userRepository->findUserById($id);
+
+    $convert=new UserDtoConverter();
+
+    $userDto=$convert->converterToDto($user);
+    $user->setActive(true);
     $userRepository->save($user);
 
     return $this->json($userDto, 200, [], ['json_encode_options' => JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES]);

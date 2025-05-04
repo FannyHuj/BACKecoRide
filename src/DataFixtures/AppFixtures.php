@@ -24,7 +24,7 @@ class AppFixtures extends Fixture
 
     public function load(ObjectManager $manager): void
     {
-// Création d'un user "normal"
+        // Création d'un user "normal"
         $user = new User();
         $user->setEmail("user@ecoride.com");
         $user->setRoles(["ROLE_USER"]);
@@ -55,7 +55,7 @@ class AppFixtures extends Fixture
         $bob->setLastName("Grimes");
         $manager->persist($bob);
 
-// Création d'un user admin
+        // Création d'un user admin
         $userAdmin = new User();
         $userAdmin->setEmail("admin@ecoride.com");
         $userAdmin->setRoles(["ROLE_ADMIN"]);
@@ -66,58 +66,80 @@ class AppFixtures extends Fixture
         $userAdmin->setLastName("Meyer");
         $manager->persist($userAdmin);
 
+        // Création d'un user employe
+        $userEmployee = new User();
+        $userEmployee->setEmail("employe1@ecoride.com");
+        $userEmployee->setRoles(["ROLE_EMPLOYE"]);
+        $userEmployee->setPassword($this->userPasswordHasher->hashPassword($userEmployee, "password"));
+        $userEmployee->setCredit(20);
+        $userEmployee->setActive(true);
+        $userEmployee->setFirstName("Stefan");
+        $userEmployee->setLastName("Job");
+        $manager->persist($userEmployee);
 
-          // Création d'une marque
-          $peugeot = new Brand();
-          $peugeot->setLibelle('Peugeot');
-          $manager->persist($peugeot);
+        // Création d'un user employe
+        $userEmployee = new User();
+        $userEmployee->setEmail("employe2@ecoride.com");
+        $userEmployee->setRoles(["ROLE_EMPLOYE"]);
+        $userEmployee->setPassword($this->userPasswordHasher->hashPassword($userEmployee, "password"));
+        $userEmployee->setCredit(20);
+        $userEmployee->setActive(true);
+        $userEmployee->setFirstName("Enzo");
+        $userEmployee->setLastName("Forbes");
+        $manager->persist($userEmployee);
 
-          $citroen = new Brand();
-          $citroen->setLibelle('Citroen');
-          $manager->persist($citroen);
 
-          $bmw = new Brand();
-          $bmw->setLibelle('BMW');
-          $manager->persist($bmw);
+        // Création d'une marque
+        $peugeot = new Brand();
+        $peugeot->setLibelle('Peugeot');
+        $manager->persist($peugeot);
 
-            // Création de voitures
+        $citroen = new Brand();
+        $citroen->setLibelle('Citroen');
+        $manager->persist($citroen);
+
+        $bmw = new Brand();
+        $bmw->setLibelle('BMW');
+        $manager->persist($bmw);
+
+        // Création de voitures
         $cars = [];
         
-            $car = new Car();
-            $car->setUser($user);
-            $car->setBrand($peugeot);
-            $car->setModel('206');
-            $car->setRegistration('AA-123-AA');
-            $car->setEnergy(EnergyEnum::GASOLINE);
-            $car->setColor('Noir');
-            $car->setFirstRegistrationDate('2020-01-01');
-            $manager->persist($car);
+        $car = new Car();
+        $car->setUser($user);
+        $car->setBrand($peugeot);
+        $car->setModel('206');
+        $car->setRegistration('AA-123-AA');
+        $car->setEnergy(EnergyEnum::GASOLINE);
+        $car->setColor('Noir');
+        $car->setFirstRegistrationDate('2020-01-01');
+        $manager->persist($car);
 
-            $cars[]=$car;
+        $cars[]=$car;
 
-            $C6 = new Car();
-            $C6->setUser($bob);
-            $C6->setBrand($citroen);
-            $C6->setModel('C6');
-            $C6->setRegistration('AA-456-AA');
-            $C6 ->setEnergy(EnergyEnum::GASOLINE);
-            $C6 ->setColor('Noir');
-            $C6 ->setFirstRegistrationDate('2020-01-01');
-                $manager->persist($C6);
-                $cars[]=$C6;
+        $C6 = new Car();
+        $C6->setUser($bob);
+        $C6->setBrand($citroen);
+        $C6->setModel('C6');
+        $C6->setRegistration('AA-456-AA');
+        $C6 ->setEnergy(EnergyEnum::GASOLINE);
+        $C6 ->setColor('Noir');
+        $C6 ->setFirstRegistrationDate('2020-01-01');
+        $manager->persist($C6);
+        $cars[]=$C6;
 
-             $IX1 = new Car();
-             $IX1->setUser($alice);
-             $IX1 ->setBrand($bmw);
-             $IX1->setModel('C6');
-             $IX1->setRegistration('AA-456-AA');
-             $IX1->setEnergy(EnergyEnum::GASOLINE);
-             $IX1 ->setColor('Noir');
-             $IX1 ->setFirstRegistrationDate('2020-01-01');
-                    $manager->persist($IX1);
-                    $cars[]=$IX1;
+        $IX1 = new Car();
+        $IX1->setUser($alice);
+        $IX1 ->setBrand($bmw);
+        $IX1->setModel('C6');
+        $IX1->setRegistration('AA-456-AA');
+        $IX1->setEnergy(EnergyEnum::GASOLINE);
+        $IX1 ->setColor('Noir');
+        $IX1 ->setFirstRegistrationDate('2020-01-01');
+        $manager->persist($IX1);
+        $cars[]=$IX1;
 
-              // Création de 10 trips précis
+        // Création de 10 trips précis
         $trips = [];
 
         for ($i = 1; $i < 10; $i++) {
@@ -143,11 +165,8 @@ class AppFixtures extends Fixture
                 ->setTrip($trip)
                 ->setDriver(true)
                 ->setBookingDate($trip->getDepartDate());
-            $manager->persist($userTripDriver);
-
-            
+            $manager->persist($userTripDriver);       
         }
-
         $manager->flush();
     }
 }

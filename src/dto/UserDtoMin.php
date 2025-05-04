@@ -2,7 +2,7 @@
 
 namespace App\dto;
 
-use App\Entity\Review;
+use App\Entity\User;
 
 Class UserDtoMin {
 

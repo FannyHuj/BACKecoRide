@@ -8,14 +8,9 @@ use App\Repository\TripRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Attribute\Route;
-use App\Entity\Trip;
-use App\Entity\User;
 use App\Entity\UserTrip;
-use App\Repository\UserTripRepository;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Serializer\SerializerInterface;
 use App\dto\TripFullDto;
-use App\dto\UserDtoMin;
 use App\dtoConverter\TripFullDtoConverter;
 use App\Repository\CarRepository;
 use App\Repository\UserRepository;
@@ -121,6 +116,21 @@ class TripController extends AbstractController
 
         $trips= $repository->findAllTrip();
 
+        $convert=new TripListDtoConverter($tripService);
+        $dtoList = [];
+
+        foreach($trips as $trip){
+            array_push($dtoList, $convert->converterToDto($trip));
+        }
+
+        return $this->json($dtoList, 200, [], ['json_encode_options' => JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES]);
+    }
+
+    #[Route('/api/findByUser/{userId}')]
+    public function findTripByUser (TripRepository $repository,UserRepository $userRepository, TripService $tripService,int $userId): JsonResponse{
+
+        $user=$userRepository->findUserById($userId);
+        $trips= $repository->findTripsByUser($user);
         $convert=new TripListDtoConverter($tripService);
         $dtoList = [];
 

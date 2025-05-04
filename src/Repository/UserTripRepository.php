@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Review;
 use App\Entity\UserTrip;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -24,5 +25,14 @@ class UserTripRepository extends ServiceEntityRepository
         $this->getEntityManager()->persist($ut);
         $this->getEntityManager()->flush();
     }
+
+    public function findByUser(User $user): void
+    {
+
+        $this->findBy(['user' => $user]);
+        $this->getEntityManager()->flush();
+    }
+    
+
 
 }

@@ -36,6 +36,7 @@ class TripListDtoConverter {
         $tripListDto -> setPlaceNumber($trip->getPlaceNumber());
         $tripListDto -> setDepartLocation($trip-> getDepartLocation());
         $tripListDto -> setArrivalLocation($trip-> getArrivalLocation());
+        $tripListDto -> setStatus($trip-> getStatus());
 
         $user=new UserDtoMin();
         $user -> setFirstName($driver->getFirstName());

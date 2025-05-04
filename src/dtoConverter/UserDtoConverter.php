@@ -27,6 +27,7 @@ class UserDtoConverter {
         $userDto->setPhoneNumber($entity->getPhoneNumber());
         $userDto->setAddress($entity->getAddress());
         $userDto->setActive($entity->getActive());
+        $userDto->setRoles($entity->getRoles());
 
         return $userDto;
 

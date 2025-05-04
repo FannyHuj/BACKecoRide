@@ -2,42 +2,27 @@
 
 namespace App\Repository;
 
-use App\Entity\Review;
-use App\Entity\Trip;
+use App\Entity\ReportTrip;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<Review>
+ * @extends ServiceEntityRepository<ReportTrip>
  */
-class ReviewRepository extends ServiceEntityRepository
+class ReportTripRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Review::class);
+        parent::__construct($registry, ReportTrip::class);
     }
 
-    public function findByTrip(Trip $trip): array
-    {
-        return $this->createQueryBuilder('r')
-            ->andWhere('r.trip = :trip')
-            ->setParameter('trip', $trip)
-            ->getQuery()
-            ->getResult();
-    }
-
-    public function save(Review $review){
-        $this->getEntityManager()->persist($review);
+    public function save(ReportTrip $reportTrip){
+        $this->getEntityManager()->persist($reportTrip);
         $this->getEntityManager()->flush();
     }
 
-    public function findAllReview(){
-        return $this->findAll();
-    }
-
-
     //    /**
-    //     * @return Review[] Returns an array of Review objects
+    //     * @return ReportTrip[] Returns an array of ReportTrip objects
     //     */
     //    public function findByExampleField($value): array
     //    {
@@ -51,7 +36,7 @@ class ReviewRepository extends ServiceEntityRepository
     //        ;
     //    }
 
-    //    public function findOneBySomeField($value): ?Review
+    //    public function findOneBySomeField($value): ?ReportTrip
     //    {
     //        return $this->createQueryBuilder('r')
     //            ->andWhere('r.exampleField = :val')

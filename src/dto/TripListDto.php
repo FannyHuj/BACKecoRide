@@ -3,6 +3,7 @@
 namespace App\dto;
 
 use App\dto\UserDtoMin;
+use App\Entity\TripsStatusEnum;
 
 Class TripListDto {
     
@@ -15,6 +16,7 @@ Class TripListDto {
     private ?int $placeNumber = null;
     private ?string $departLocation = null;
     private ?string $arrivalLocation = null;
+    private ?TripsStatusEnum $status = null;
 
     /**
      * Get the value of departDate
@@ -192,6 +194,26 @@ Class TripListDto {
     public function setId($id)
     {
         $this->id = $id;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of status
+     */ 
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * Set the value of status
+     *
+     * @return  self
+     */ 
+    public function setStatus($status)
+    {
+        $this->status = $status;
 
         return $this;
     }

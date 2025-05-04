@@ -20,10 +20,10 @@ class Review
     private ?int $notation = null;
 
     #[ORM\Column(length: 50, nullable: true)]
-    private ?string $status = null;
+    private ?bool $publish = null;
 
     #[ORM\ManyToOne(inversedBy: 'review')]
-    private ?User $user = null;
+    private ?User $owner = null;
 
     #[ORM\ManyToOne]
     private ?Trip $trip = null;
@@ -57,30 +57,6 @@ class Review
         return $this;
     }
 
-    public function getStatus(): ?string
-    {
-        return $this->status;
-    }
-
-    public function setStatus(?string $status): static
-    {
-        $this->status = $status;
-
-        return $this;
-    }
-
-    public function getUser(): ?User
-    {
-        return $this->user;
-    }
-
-    public function setUser(?User $user): static
-    {
-        $this->user = $user;
-
-        return $this;
-    }
-
     public function getTrip(): ?Trip
     {
         return $this->trip;
@@ -89,6 +65,46 @@ class Review
     public function setTrip(?Trip $trip): static
     {
         $this->trip = $trip;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of publish
+     */ 
+    public function getPublish()
+    {
+        return $this->publish;
+    }
+
+    /**
+     * Set the value of publish
+     *
+     * @return  self
+     */ 
+    public function setPublish($publish)
+    {
+        $this->publish = $publish;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of owner
+     */ 
+    public function getOwner()
+    {
+        return $this->owner;
+    }
+
+    /**
+     * Set the value of owner
+     *
+     * @return  self
+     */ 
+    public function setOwner($owner)
+    {
+        $this->owner = $owner;
 
         return $this;
     }
