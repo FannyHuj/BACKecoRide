@@ -144,9 +144,10 @@ class TripController extends AbstractController
 
     #[Route('/api/terminate/{tripId}')]
     public function terminateTrip (TripRepository $repository,EmailService $emailService,int $tripId): JsonResponse{
-       // $repository-> terminateTrip($tripId);
-        $emailService->sendEmail("le contenu","le sujet", "test@example.com");
+        $repository-> terminateTrip($tripId);
+        $emailService->sendEmail("Le trajet est terminé, vous pouvez vous rendre sur votre espace pour noter le trajet","le sujet", "test@example.com");
         return $this->json(['status' => 'success']);
     }
+
 
 }

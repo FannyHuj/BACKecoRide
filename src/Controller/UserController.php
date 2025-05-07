@@ -2,21 +2,32 @@
 
 namespace App\Controller;
 
+use App\dto\SignInDto;
 use App\dtoConverter\UserDtoConverter;
-use App\Entity\User;
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Attribute\Route;
+use App\dtoConverter\SignInDtoConverter;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class UserController extends AbstractController
 {
-    #[Route('/api/user', methods:['POST'])]
-    public function new (#[MapRequestPayload] User $user,UserRepository $userRepository):JsonResponse{
-        $userRepository->save($user);
+
+    #[Route('/newUser', methods:['POST'])] 
+    public function new( #[MapRequestPayload] SignInDto $signInDto,UserRepository $userRepository,UserPasswordHasherInterface $passwordHasher): JsonResponse {
+    
+        $converter = new SignInDtoConverter(); 
+        $newUser = $converter->converterToEntity($signInDto);
+        $hashedPassword = $passwordHasher->hashPassword($newUser, $newUser->getPassword());
+        $newUser->setPassword($hashedPassword);
+
+        $userRepository->save($newUser);
+
         return $this->json(['status' => 'success']);
     }
+    
 
     #[Route('/api/user/{email}')]
     public function getMail ($email,UserRepository $userRepository):JsonResponse{

@@ -21,6 +21,7 @@ class ReportTripRepository extends ServiceEntityRepository
         $this->getEntityManager()->flush();
     }
 
+
     //    /**
     //     * @return ReportTrip[] Returns an array of ReportTrip objects
     //     */

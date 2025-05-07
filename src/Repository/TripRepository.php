@@ -106,6 +106,9 @@ class TripRepository extends ServiceEntityRepository
         $trip->setStatus(TripsStatusEnum::Done);
         $this->getEntityManager()->flush();
     }
+
+
+    
 }
 
     //    /**

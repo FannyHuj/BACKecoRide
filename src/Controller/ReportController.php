@@ -24,4 +24,5 @@ class ReportController extends AbstractController
         $reportTripRepository->save($reportEntity);
         return $this->json(['status' => 'success']);
     }
+
 }
