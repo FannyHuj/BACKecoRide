@@ -17,7 +17,7 @@ use App\Repository\UserRepository;
 use App\services\TripService;
 use App\services\EmailService;
 use DateTime;
-use Symfony\Component\Mailer\MailerInterface;
+use App\Entity\TripsStatusEnum;
 
 class TripController extends AbstractController
 {
@@ -30,11 +30,13 @@ class TripController extends AbstractController
                             $car= $carRepository->findCarById($tripDto->getCar()->getId());
                             $user= $userRepository->findUserById($tripDto->getDriver()->getId());
                             $trip->setCar($car);
+                            $trip->setStatus(TripsStatusEnum::Coming);
                            
                             $ut=new UserTrip();
                             $ut->setTrip($trip);
                             $ut->setUser($user);
                             $ut->setDriver(true);
+                            $ut->setBookingDate(new DateTime());
 
                             $trip->addUser($ut);
                             $tripRepository->save($trip);
@@ -58,21 +60,9 @@ class TripController extends AbstractController
 
 
     #[Route('/api/booking/trip/{id}/user/{userId}', methods:['POST'])]
-    public function booking ($id, $userId, TripRepository $repository, UserRepository $userRepository): JsonResponse{
+    public function booking ($id, $userId, TripService $service): JsonResponse{
 
-         $trip= $repository->findTripById($id);
-         $user=$userRepository->findUserById($userId);
-
-         $ut=new UserTrip();
-         $ut->setTrip($trip);
-         $ut->setUser($user);
-         $ut->setDriver(false);
-         $ut->setBookingDate(new DateTime());
-
-         $trip->setPlaceNumber($trip->getPlaceNumber()-1);
-         $trip->getUsers()->add($ut);
-
-         $repository-> save($trip);
+        $service->bookingTrip($id,$userId);
 
         return $this->json(['status' => 'success']);
     }
@@ -96,11 +86,11 @@ class TripController extends AbstractController
     }
 
     
-    #[Route('/api/cancel/trip/{id}', methods:['PUT'])]
-    public function cancel ($id, TripRepository $tripRepository, MailerInterface $mailer):JsonResponse{
+    #[Route('/api/cancel/trip/{id}/user/{userId}', methods:['PUT'])]
+    public function cancel ($id, $userId,TripService $tripService):JsonResponse{
 
-        $tripRepository->cancel($id,$mailer);
-
+        $tripService->cancelTrip($id,$userId);
+        
         return $this->json(['status' => 'success']);
     }
 
@@ -147,6 +137,14 @@ class TripController extends AbstractController
         $repository-> terminateTrip($tripId);
         $emailService->sendEmail("Le trajet est terminé, vous pouvez vous rendre sur votre espace pour noter le trajet","le sujet", "test@example.com");
         return $this->json(['status' => 'success']);
+    }
+
+    #[Route('/api/start/trip/{id}', methods:['PUT'])]
+    public function startTrip ($id,TripRepository $repository):JsonResponse{
+
+        $repository-> startTrip($id);
+        return $this->json(['status' => 'success']);
+  
     }
 
 

@@ -14,6 +14,7 @@ Class UserDto {
     private ?\DateTimeInterface $birthDate = null;
     private ?string $picture = null;
     private bool $active = true;
+    private array $cars = [];
 
      /**
      * Get the value of id
@@ -212,6 +213,26 @@ Class UserDto {
     public function setActive($active)
     {
         $this->active = $active;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of cars
+     */ 
+    public function getCars()
+    {
+        return $this->cars;
+    }
+
+    /**
+     * Set the value of cars
+     *
+     * @return  self
+     */ 
+    public function setCars($cars)
+    {
+        $this->cars = $cars;
 
         return $this;
     }

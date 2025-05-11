@@ -5,6 +5,8 @@ use App\dto\TripFullDto;
 use App\dto\UserDtoMin;
 use App\dto\CarMinDto;
 use App\Entity\Trip;
+use App\Entity\Car;
+use DateTime;
 
 class TripFullDtoConverter {
 
@@ -17,6 +19,12 @@ class TripFullDtoConverter {
         $trip->setPlaceNumber($dto->getPlaceNumber());
         $trip->setCreditPrice($dto->getCreditPrice());
         $trip->setStatus($dto->getStatus());
+        
+        $carDto = new Car();
+        $carDto->setModel($dto->getCar()->getModel());
+        $carDto->setEnergy($dto->getCar()->getEnergy());
+        $carDto->setColor($dto->getCar()->getColor());
+        $trip->setCar($carDto);
 
         return $trip;
     }
@@ -41,6 +49,15 @@ class TripFullDtoConverter {
       $tripDto->setPlaceNumber($entity->getPlaceNumber());
       $tripDto->setCreditPrice($entity->getCreditPrice());
       $tripDto->setStatus($entity->getStatus());
+
+      
+      // Gérer la voiture
+      $carDto = new CarMinDto();
+      $carDto->setId($entity->getCar()->getId());
+      $carDto->setModel($entity->getCar()->getModel());
+      $carDto->setEnergy($entity->getCar()->getEnergy());
+      $carDto->setColor($entity->getCar()->getColor());
+      $tripDto->setCar($carDto);
   
       // Gérer le conducteur
       $driver = new UserDtoMin();
@@ -65,14 +82,6 @@ class TripFullDtoConverter {
       }
   
       $tripDto->setDriver($driver);
-  
-      // Gérer la voiture
-      $carDto = new CarMinDto();
-      $carDto->setId($entity->getCar()->getId());
-      $carDto->setModel($entity->getCar()->getModel());
-      $carDto->setEnergy($entity->getCar()->getEnergy());
-      $carDto->setColor($entity->getCar()->getColor());
-      $tripDto->setCar($carDto);
   
       return $tripDto;
   }

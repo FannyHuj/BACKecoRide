@@ -7,6 +7,7 @@ use App\Entity\User;
 
 Class CarDto {
 
+    private ?int $id = null;
     private ?string $model = null;
     private ?string $registration = null;
     private ?string $energy = null;
@@ -152,6 +153,26 @@ Class CarDto {
     public function setUser($user)
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of id
+     */ 
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set the value of id
+     *
+     * @return  self
+     */ 
+    public function setId($id)
+    {
+        $this->id = $id;
 
         return $this;
     }

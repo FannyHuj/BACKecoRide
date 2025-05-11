@@ -2,18 +2,19 @@
 
 namespace App\dto;
 use App\Entity\TripsStatusEnum;
+use DateTime;
 
 Class TripFullDto {
     private ?int $id = null;
-    private ?\DateTimeInterface $departDate = null;
+    private ?DateTime $departDate = null;
     private ?string $departLocation = null;
-    private ?\DateTimeInterface $arrivalDate = null;
+    private ?DateTime $arrivalDate = null;
     private ?string $arrivalLocation = null;
     private ?TripsStatusEnum $status =null;
     private ?int $placeNumber = null;
     private ?int $creditPrice = null;
-    private ?CarMinDto $car;
-    private ?UserDtoMin $driver;
+    private ?CarMinDto $car = null;
+    private ?UserDtoMin $driver = null;
 
     
     /**

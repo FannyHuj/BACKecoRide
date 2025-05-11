@@ -2,6 +2,7 @@
 namespace App\dtoConverter;
 
 use App\dto\UserDto;
+use App\dto\CarMinDto;
 use App\Entity\User;
 
 class UserDtoConverter {
@@ -28,9 +29,21 @@ class UserDtoConverter {
         $userDto->setAddress($entity->getAddress());
         $userDto->setActive($entity->getActive());
         $userDto->setRoles($entity->getRoles());
-
+    
+        $cars = [];
+        foreach ($entity->getCars() as $carEntity) {
+            $car = new CarMinDto();
+            $car->setId($carEntity->getId());
+            $car->setModel($carEntity->getModel());
+            $car->setEnergy($carEntity->getEnergy());
+            $car->setColor($carEntity->getColor());
+            $cars[] = $car;
+        }
+    
+        $userDto->setCars($cars); 
+    
         return $userDto;
-
-}
+    }
+    
 
 }

@@ -4,12 +4,13 @@ namespace App\dto;
 
 use App\dto\UserDtoMin;
 use App\Entity\TripsStatusEnum;
+use DateTime;
 
 Class TripListDto {
     
     private ?int $id = null;
-    private ?\DateTimeInterface $departDate =null;
-    private ?\DateTimeInterface $arrivalDate = null;
+    private ?DateTime $departDate =null;
+    private ?DateTime $arrivalDate = null;
     private ?int $creditPrice = null;
     private ?UserDtoMin $driver = null;
     private ?CarMinDto $car = null;
@@ -18,25 +19,6 @@ Class TripListDto {
     private ?string $arrivalLocation = null;
     private ?TripsStatusEnum $status = null;
 
-    /**
-     * Get the value of departDate
-     */ 
-    public function getDepartDate()
-    {
-        return $this->departDate;
-    }
-
-    /**
-     * Set the value of departDate
-     *
-     * @return  self
-     */ 
-    public function setDepartDate($departDate)
-    {
-        $this->departDate = $departDate;
-
-        return $this;
-    }
 
     /**
      * Get the value of creditPrice
@@ -54,26 +36,6 @@ Class TripListDto {
     public function setCreditPrice($creditPrice)
     {
         $this->creditPrice = $creditPrice;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of arrivalDate
-     */ 
-    public function getArrivalDate()
-    {
-        return $this->arrivalDate;
-    }
-
-    /**
-     * Set the value of arrivalDate
-     *
-     * @return  self
-     */ 
-    public function setArrivalDate($arrivalDate)
-    {
-        $this->arrivalDate = $arrivalDate;
 
         return $this;
     }
@@ -216,6 +178,46 @@ Class TripListDto {
     public function setDriver($driver)
     {
         $this->driver = $driver;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of departDate
+     */ 
+    public function getDepartDate()
+    {
+        return $this->departDate;
+    }
+
+    /**
+     * Set the value of departDate
+     *
+     * @return  self
+     */ 
+    public function setDepartDate($departDate)
+    {
+        $this->departDate = $departDate;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of arrivalDate
+     */ 
+    public function getArrivalDate()
+    {
+        return $this->arrivalDate;
+    }
+
+    /**
+     * Set the value of arrivalDate
+     *
+     * @return  self
+     */ 
+    public function setArrivalDate($arrivalDate)
+    {
+        $this->arrivalDate = $arrivalDate;
 
         return $this;
     }

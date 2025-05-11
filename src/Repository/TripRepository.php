@@ -58,7 +58,7 @@ class TripRepository extends ServiceEntityRepository
         return $query->execute();
     }
 
-    public function cancel ($id, MailerInterface $mailer){
+    public function cancel ($id){
         $trip=$this->findTripById($id);
         $trip->setStatus(TripsStatusEnum::Canceled);
         $this->getEntityManager()->flush();
@@ -104,6 +104,12 @@ class TripRepository extends ServiceEntityRepository
     public function terminateTrip(int $tripId){
         $trip= $this->findTripById($tripId);
         $trip->setStatus(TripsStatusEnum::Done);
+        $this->getEntityManager()->flush();
+    }
+
+    public function startTrip(int $tripId){
+        $trip= $this->findTripById($tripId);
+        $trip->setStatus(TripsStatusEnum::InProgress);
         $this->getEntityManager()->flush();
     }
 

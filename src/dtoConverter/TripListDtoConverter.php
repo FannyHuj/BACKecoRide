@@ -6,6 +6,7 @@ use App\dto\UserDtoMin;
 use App\Entity\Trip;
 use App\dto\CarMinDto;
 use App\Services\TripService;
+use DateTime;
 
 class TripListDtoConverter {
 
@@ -19,7 +20,8 @@ class TripListDtoConverter {
   public function converterToEntity($dto){
 
         $trip = new Trip();
-        $trip -> setDepartDate($dto->getDepartDate());
+        $trip->setDepartDate($dto->getDepartDate());
+        $trip->setArrivalDate($dto->getArrivalDate());
 
         return $trip;
     }
