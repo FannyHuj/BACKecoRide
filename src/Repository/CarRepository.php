@@ -21,6 +21,11 @@ class CarRepository extends ServiceEntityRepository
         return $this->find($id);
     }
 
+     public function save(Car $car){
+        $this->getEntityManager()->persist($car);
+        $this->getEntityManager()->flush();
+    }
+
     //    /**
     //     * @return Car[] Returns an array of Car objects
     //     */

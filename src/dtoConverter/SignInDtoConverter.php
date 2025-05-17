@@ -18,29 +18,17 @@ class SignInDtoConverter {
         $newUser->setBirthDate($dto->getBirthDate());
         $newUser->setPhoneNumber($dto->getPhoneNumber());
 
+        $userRole=$dto->getRoles();
+
         $roles = $newUser->getRoles();
-        $roles[] = 'ROLE_USER';
+        $roles[] =reset($userRole);
         $newUser->setRoles($roles);
 
 
         return $newUser;
     }
 
-    public function converterToDto($entity) {
-
-        $newUserDto = new SignInDto();
-        $newUserDto->setFirstName($entity->getFirstName());
-        $newUserDto->setLastName($entity->getLastName());
-        $newUserDto->setEmail($entity->getEmail());
-        $newUserDto->setPassword($entity->getPassword());
-        $newUserDto->setAddress($entity->getAddress());
-        $newUserDto->setCredit($entity->getCredit());
-        $newUserDto->setBirthDate($entity->getBirthDate()); 
-        $newUserDto->setPhoneNumber($entity->getPhoneNumber());
-        $newUserDto->setRoles($entity->getRoles());
-    
-        return $newUserDto;
-    }
+ 
     
 
 

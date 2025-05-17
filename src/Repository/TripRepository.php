@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\dto\SearchDto;
+use App\dto\FiltersSearchDto;
 use App\Entity\Trip;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -55,6 +56,22 @@ class TripRepository extends ServiceEntityRepository
 
 
         $query = $qb->getQuery();
+        return $query->execute();
+    }
+
+    public function searchFilters(FiltersSearchDto $filtersSearchDto){
+
+        $qbf = $this->createQueryBuilder('trip')
+            -> where('trip.duration <= :duration')
+            -> andWhere('trip.maxPrice <= :maxPrice')
+            -> andWhere('trip.rating <= :rating')
+            -> andWhere('trip.electricCar = :true')
+            ->setParameter ('departLocation', $filtersSearchDto->getDuration())
+            ->setParameter('placeNumber', $filtersSearchDto->getMaxPrice())
+            ->setParameter('arrivalLocation', $filtersSearchDto->getRating())
+            ->setParameter ('departDate', $filtersSearchDto->getElectricCar());
+
+        $query = $qbf->getQuery();
         return $query->execute();
     }
 

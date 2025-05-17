@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\dto\SearchDto;
+use App\dto\FiltersSearchDto;
 use App\dtoConverter\TripListDtoConverter;
 use App\Repository\TripRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -47,7 +48,6 @@ class TripController extends AbstractController
     }
 
 
-
     #[Route('/api/trip/{id}')]
     public function show (TripRepository $repository,$id): JsonResponse{
 
@@ -72,6 +72,23 @@ class TripController extends AbstractController
     public function search (#[MapRequestPayload]  SearchDto $searchDto, // Le service ANGULAR appelle cette méthode et lui envoie une interface trip Map va transformer cette interface en une entité php $trip
                          TripRepository $tripRepository,TripService $tripService):JsonResponse{
          $trips = $tripRepository->search ($searchDto);
+
+         $convert=new TripListDtoConverter($tripService);
+
+         $dtoList = [];
+
+         foreach($trips as $trip){
+            array_push($dtoList,$convert->converterToDto($trip));
+         }
+         
+        return $this->json($dtoList, 200, [], ['json_encode_options' => JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES]);
+
+    }
+
+    #[Route('/api/searchTripFilter', methods:['POST'])]
+    public function filterSearch (#[MapRequestPayload]  FiltersSearchDto $filtersSearchDto, // Le service ANGULAR appelle cette méthode et lui envoie une interface trip Map va transformer cette interface en une entité php $trip
+                         TripRepository $tripRepository,TripService $tripService):JsonResponse{
+         $trips = $tripRepository->searchFilters ($filtersSearchDto);
 
          $convert=new TripListDtoConverter($tripService);
 
@@ -135,7 +152,22 @@ class TripController extends AbstractController
     #[Route('/api/terminate/{tripId}')]
     public function terminateTrip (TripRepository $repository,EmailService $emailService,int $tripId): JsonResponse{
         $repository-> terminateTrip($tripId);
-        $emailService->sendEmail("Le trajet est terminé, vous pouvez vous rendre sur votre espace pour noter le trajet","le sujet", "test@example.com");
+        $content=
+
+        "<html>
+        <head>
+        <title>EcoRide</title>
+        </head>
+        <body>
+        <p>Le voyage est annulé.</p>
+        </body>
+        </html>";
+
+        $emailService->sendEmail($content,"le sujet", "test@example.com");
+
+
+
+        
         return $this->json(['status' => 'success']);
     }
 

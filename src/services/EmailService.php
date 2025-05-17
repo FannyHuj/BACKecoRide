@@ -21,5 +21,6 @@ class EmailService {
     ->subject($subject)
     ->text($content);
      $this->mailer->send($email);
+     
    }
 }

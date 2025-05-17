@@ -20,12 +20,6 @@ class TripFullDtoConverter {
         $trip->setCreditPrice($dto->getCreditPrice());
         $trip->setStatus($dto->getStatus());
         
-        $carDto = new Car();
-        $carDto->setModel($dto->getCar()->getModel());
-        $carDto->setEnergy($dto->getCar()->getEnergy());
-        $carDto->setColor($dto->getCar()->getColor());
-        $trip->setCar($carDto);
-
         return $trip;
     }
 

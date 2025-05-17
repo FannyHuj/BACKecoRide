@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\CarRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: CarRepository::class)]
@@ -25,11 +26,11 @@ class Car
     #[ORM\Column(length: 50)]
     private ?string $color = null;
 
+    #[ORM\Column (type: Types::DATETIME_MUTABLE)]
+    private ?\DateTimeInterface $firstRegistrationDate = null;
+    
     #[ORM\Column(length: 50)]
-    private ?string $firstRegistrationDate = null;
-
-    #[ORM\ManyToOne(targetEntity: Brand::class)]
-    private Brand $brand;
+    private ?string $brand;
 
     #[ORM\ManyToOne(inversedBy: 'cars')]
     private ?User $user = null;
@@ -85,18 +86,6 @@ class Car
         return $this;
     }
 
-    public function getFirstRegistrationDate(): ?string
-    {
-        return $this->firstRegistrationDate;
-    }
-
-    public function setFirstRegistrationDate(string $firstRegistrationDate): static
-    {
-        $this->firstRegistrationDate = $firstRegistrationDate;
-
-        return $this;
-    }
-
     public function getUser(): ?User
     {
         return $this->user;
@@ -125,6 +114,28 @@ class Car
     public function setEnergy($energy)
     {
         $this->energy = $energy;
+
+        return $this;
+    }
+
+ 
+
+    /**
+     * Get the value of firstRegistrationDate
+     */ 
+    public function getFirstRegistrationDate()
+    {
+        return $this->firstRegistrationDate;
+    }
+
+    /**
+     * Set the value of firstRegistrationDate
+     *
+     * @return  self
+     */ 
+    public function setFirstRegistrationDate($firstRegistrationDate)
+    {
+        $this->firstRegistrationDate = $firstRegistrationDate;
 
         return $this;
     }

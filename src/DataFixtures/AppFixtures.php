@@ -7,11 +7,11 @@ use App\Entity\TripsStatusEnum;
 use App\Entity\User;
 use App\Entity\Trip;
 use App\Entity\Car;
-use App\Entity\Brand;
 use App\Entity\UserTrip;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use DateTimeInterface;
 
 class AppFixtures extends Fixture
 {
@@ -89,53 +89,43 @@ class AppFixtures extends Fixture
         $manager->persist($userEmployee);
 
 
-        // Création d'une marque
-        $peugeot = new Brand();
-        $peugeot->setLibelle('Peugeot');
-        $manager->persist($peugeot);
-
-        $citroen = new Brand();
-        $citroen->setLibelle('Citroen');
-        $manager->persist($citroen);
-
-        $bmw = new Brand();
-        $bmw->setLibelle('BMW');
-        $manager->persist($bmw);
 
         // Création de voitures
         $cars = [];
         
         $car = new Car();
         $car->setUser($user);
-        $car->setBrand($peugeot);
+        $car->setBrand('Peugeot');
         $car->setModel('206');
         $car->setRegistration('AA-123-AA');
         $car->setEnergy(EnergyEnum::GASOLINE);
         $car->setColor('Noir');
-        $car->setFirstRegistrationDate('2020-01-01');
+        $car->setFirstRegistrationDate(new \DateTime("2020-01-01"));
+       
+
         $manager->persist($car);
 
         $cars[]=$car;
 
         $C6 = new Car();
         $C6->setUser($bob);
-        $C6->setBrand($citroen);
+        $C6->setBrand('citroen');
         $C6->setModel('C6');
         $C6->setRegistration('AA-456-AA');
         $C6 ->setEnergy(EnergyEnum::GASOLINE);
         $C6 ->setColor('Noir');
-        $C6 ->setFirstRegistrationDate('2020-01-01');
+        $C6->setFirstRegistrationDate(new \DateTime("2021-08-21"));
         $manager->persist($C6);
         $cars[]=$C6;
 
         $IX1 = new Car();
         $IX1->setUser($alice);
-        $IX1 ->setBrand($bmw);
+        $IX1 ->setBrand('bmw');
         $IX1->setModel('C6');
         $IX1->setRegistration('AA-456-AA');
         $IX1->setEnergy(EnergyEnum::GASOLINE);
         $IX1 ->setColor('Noir');
-        $IX1 ->setFirstRegistrationDate('2020-01-01');
+        $IX1 ->setFirstRegistrationDate(new \DateTime("2010-04-21"));
         $manager->persist($IX1);
         $cars[]=$IX1;
 

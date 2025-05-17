@@ -98,7 +98,7 @@ class TripService {
 
              foreach($trip->getUsers() as $ut){
                 if($ut->getDriver()  && $ut->getUser()->getId()==$user->getId()){
-                    $trip->setStaus(TripsStatusEnum::Canceled);
+                    $trip->setStatus(TripsStatusEnum::Canceled);
                 }
              }
 

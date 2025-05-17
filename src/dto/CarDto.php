@@ -2,19 +2,19 @@
 
 namespace App\dto;
 
-use App\Entity\Brand;
-use App\Entity\User;
+use App\Entity\EnergyEnum;
+use DateTime;
 
 Class CarDto {
 
     private ?int $id = null;
     private ?string $model = null;
     private ?string $registration = null;
-    private ?string $energy = null;
+    private ?EnergyEnum $energy = null;
     private ?string $color = null;
-    private ?string $firstRegistrationDate = null;
-    private Brand $brand;
-    private ?User $user = null;
+    private ?DateTime $firstRegistrationDate = null;
+    private ?string $brand = null;
+    private ?UserDtoMin $driver = null;
 
 
     /**
@@ -98,26 +98,6 @@ Class CarDto {
     }
 
     /**
-     * Get the value of firstRegistrationDate
-     */ 
-    public function getFirstRegistrationDate()
-    {
-        return $this->firstRegistrationDate;
-    }
-
-    /**
-     * Set the value of firstRegistrationDate
-     *
-     * @return  self
-     */ 
-    public function setFirstRegistrationDate($firstRegistrationDate)
-    {
-        $this->firstRegistrationDate = $firstRegistrationDate;
-
-        return $this;
-    }
-
-    /**
      * Get the value of brand
      */ 
     public function getBrand()
@@ -138,26 +118,6 @@ Class CarDto {
     }
 
     /**
-     * Get the value of user
-     */ 
-    public function getUser()
-    {
-        return $this->user;
-    }
-
-    /**
-     * Set the value of user
-     *
-     * @return  self
-     */ 
-    public function setUser($user)
-    {
-        $this->user = $user;
-
-        return $this;
-    }
-
-    /**
      * Get the value of id
      */ 
     public function getId()
@@ -173,6 +133,47 @@ Class CarDto {
     public function setId($id)
     {
         $this->id = $id;
+
+        return $this;
+    }
+
+
+    /**
+     * Get the value of firstRegistrationDate
+     */ 
+    public function getFirstRegistrationDate()
+    {
+        return $this->firstRegistrationDate;
+    }
+
+    /**
+     * Set the value of firstRegistrationDate
+     *
+     * @return  self
+     */ 
+    public function setFirstRegistrationDate($firstRegistrationDate)
+    {
+        $this->firstRegistrationDate = $firstRegistrationDate;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of driver
+     */ 
+    public function getDriver()
+    {
+        return $this->driver;
+    }
+
+    /**
+     * Set the value of driver
+     *
+     * @return  self
+     */ 
+    public function setDriver($driver)
+    {
+        $this->driver = $driver;
 
         return $this;
     }
