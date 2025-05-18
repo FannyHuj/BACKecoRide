@@ -12,6 +12,7 @@ Class SignInDto {
     private ?\DateTimeInterface $birthDate = null;
     private ?string $phoneNumber = null;
     private array $roles = [];
+    private ?string $picture = null;
 
     /**
      * Get the value of firstName
@@ -189,6 +190,26 @@ Class SignInDto {
     public function setBirthDate($birthDate)
     {
         $this->birthDate = $birthDate;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of picture
+     */ 
+    public function getPicture()
+    {
+        return $this->picture;
+    }
+
+    /**
+     * Set the value of picture
+     *
+     * @return  self
+     */ 
+    public function setPicture($picture)
+    {
+        $this->picture = $picture;
 
         return $this;
     }

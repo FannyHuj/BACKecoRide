@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\dto\SearchDto;
 use App\dto\FiltersSearchDto;
+use App\Entity\EnergyEnum;
 use App\Entity\Trip;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -54,6 +55,23 @@ class TripRepository extends ServiceEntityRepository
             ->setParameter ('departDate', $searchDto->getDepartDate())
             ->setParameter ('status', TripsStatusEnum::Coming);
 
+        if($searchDto->getIsEcologic()){
+            $qb->join('trip.car', 'car')
+                ->andWhere('car.energy = :electricCar OR car.energy = :hybridCar')
+                ->setParameter('electricCar', EnergyEnum::ELECTRIC)
+                ->setParameter('hybridCar', EnergyEnum::HYBRID);
+           
+        }
+        if($searchDto->getCreditPrice()>0){
+            $qb->andWhere('trip.creditPrice <= :creditPrice')
+                ->setParameter('creditPrice', $searchDto->getCreditPrice());
+        }
+        if($searchDto->getNotation()>0){
+            $qb->join('trip.driver', 'driver')
+                ->andWhere('driver.notation >= :notation')
+                ->setParameter('notation', $searchDto->getNotation());
+            
+        }
 
         $query = $qb->getQuery();
         return $query->execute();

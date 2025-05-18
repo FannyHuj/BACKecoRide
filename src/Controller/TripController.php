@@ -19,6 +19,7 @@ use App\services\TripService;
 use App\services\EmailService;
 use DateTime;
 use App\Entity\TripsStatusEnum;
+use Symfony\Component\HttpFoundation\Request;
 
 class TripController extends AbstractController
 {
@@ -70,7 +71,8 @@ class TripController extends AbstractController
 
     #[Route('/api/searchTrip', methods:['POST'])]
     public function search (#[MapRequestPayload]  SearchDto $searchDto, // Le service ANGULAR appelle cette méthode et lui envoie une interface trip Map va transformer cette interface en une entité php $trip
-                         TripRepository $tripRepository,TripService $tripService):JsonResponse{
+                         TripRepository $tripRepository,
+                         TripService $tripService):JsonResponse{
          $trips = $tripRepository->search ($searchDto);
 
          $convert=new TripListDtoConverter($tripService);
@@ -80,6 +82,37 @@ class TripController extends AbstractController
          foreach($trips as $trip){
             array_push($dtoList,$convert->converterToDto($trip));
          }
+         
+        return $this->json($dtoList, 200, [], ['json_encode_options' => JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES]);
+
+    }
+
+    #[Route('/api/search', methods:['GET'])]
+    public function searchFilters (Request $request, // Le service ANGULAR appelle cette méthode et lui envoie une interface trip Map va transformer cette interface en une entité php $trip
+                         TripRepository $tripRepository,
+                         TripService $tripService):JsonResponse{
+         
+         
+            $searchDto = new SearchDto();
+            $searchDto->setDepartLocation($request->query->get('departLocation'));
+            $searchDto->setArrivalLocation($request->query->get('arrivalLocation'));
+            $searchDto->setDepartDate(new \DateTime($request->query->get('departDate')));
+            $searchDto->setPlaceNumber($request->query->get('placeNumber'));
+            $searchDto->setCreditPrice($request->query->get('maxPrice'));
+            $searchDto->setNotation($request->query->get('notation'));
+
+
+            $searchDto->setIsEcologic($request->query->get('isEcologic')=="true" ? true : false);
+            
+            $trips = $tripRepository->search ($searchDto);
+
+            $convert=new TripListDtoConverter($tripService);
+
+            $dtoList = [];
+
+            foreach($trips as $trip){
+                array_push($dtoList,$convert->converterToDto($trip));
+            }
          
         return $this->json($dtoList, 200, [], ['json_encode_options' => JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES]);
 

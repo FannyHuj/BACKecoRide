@@ -11,6 +11,7 @@ use App\Entity\UserTrip;
 use App\Entity\Trip;
 use DateTime;
 use Exception;
+use Psr\Log\LoggerInterface;
 
 class TripService {
 
@@ -18,20 +19,21 @@ class TripService {
     private TripRepository $tripRepository;
     private UserRepository $userRepository;
     private EmailService $mailService;
+    private LoggerInterface $logger;
 
-    public function __construct(TripRepository $tripRepository, UserRepository $userRepository,ReviewRepository $reviewRepository,EmailService $mailService)
+    public function __construct(TripRepository $tripRepository, UserRepository $userRepository,ReviewRepository $reviewRepository,EmailService $mailService, LoggerInterface $logger)
     {
         $this->reviewRepository = $reviewRepository;
         $this->tripRepository = $tripRepository;
         $this->userRepository = $userRepository;
         $this->mailService=$mailService;
+        $this->logger = $logger;
     }
 
     public function getNotation(User $driver){
 
-        $totalNotes = 0;
         $nbreNote = 0;
-
+        $totalNotes = 0;
         //Récupère tous les trajets du driver
         $trips=$driver->getTrips();
 
@@ -41,12 +43,14 @@ class TripService {
             $trip=$usertrip->getTrip();
             $reviews=$this->reviewRepository->findByTrip($trip);
 
-            //Pour chaque avis concernant le voyage $trip on récupère la note
-          foreach($reviews  as $review)
-            
-            $totalNotes += $review->getNotation();
-            $nbreNote++;
+            foreach($reviews as $review) {
+                $totalNotes += $review->getNotation();
+                $nbreNote++;
+            }
         }
+        
+
+        $this->logger->debug('Notes', ['TotalNote' =>  $totalNotes, 'NbreNote' => $nbreNote]);
         return $nbreNote > 0 ? (int) round($totalNotes / $nbreNote) : 0;
 
     }

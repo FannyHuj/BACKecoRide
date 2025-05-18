@@ -17,6 +17,7 @@ class SignInDtoConverter {
         $newUser->setCredit(20);
         $newUser->setBirthDate($dto->getBirthDate());
         $newUser->setPhoneNumber($dto->getPhoneNumber());
+        $newUser->setPicture($dto->getPicture());
 
         $userRole=$dto->getRoles();
 
