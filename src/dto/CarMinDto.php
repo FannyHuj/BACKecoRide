@@ -10,6 +10,7 @@ Class CarMinDto {
     private ?string $model = null;
     private ?EnergyEnum $energy = null;
     private ?string $color = null;
+     private ?string $brand = null;
 
         /**
      * Get the value of id
@@ -90,4 +91,24 @@ Class CarMinDto {
 
         return $this;
     }
+
+     /**
+      * Get the value of brand
+      */ 
+     public function getBrand()
+     {
+          return $this->brand;
+     }
+
+     /**
+      * Set the value of brand
+      *
+      * @return  self
+      */ 
+     public function setBrand($brand)
+     {
+          $this->brand = $brand;
+
+          return $this;
+     }
 }

@@ -25,4 +25,18 @@ class ReportController extends AbstractController
         return $this->json(['status' => 'success']);
     }
 
-}
+    #[Route('/api/employee/all/reports', methods: ['GET'])]
+    public function getAllReport(ReportTripRepository $reportRepository, ReportDtoConverter $converter): JsonResponse
+    {
+        $reports = $reportRepository->findAll();
+      
+        $reportDtos[] = [];
+
+        foreach ($reports as $report) {
+         $reportDtos= $converter->convertToDto($report);
+        }
+
+        return $this->json($reportDtos);
+    }
+
+    }

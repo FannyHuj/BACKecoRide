@@ -19,6 +19,7 @@ use App\services\TripService;
 use App\services\EmailService;
 use DateTime;
 use App\Entity\TripsStatusEnum;
+use App\Entity\User;
 use Symfony\Component\HttpFoundation\Request;
 
 class TripController extends AbstractController
@@ -50,12 +51,19 @@ class TripController extends AbstractController
 
 
     #[Route('/api/trip/{id}')]
-    public function show (TripRepository $repository,$id): JsonResponse{
+    public function show (TripRepository $repository,$id,TripService $service): JsonResponse{
 
         $trip= $repository->findTripById($id);
         $convert=new TripFullDtoConverter();
+        $driver=new User();
        
         $tripDto=$convert->converterToDto($trip);
+        foreach($trip->getUsers() as $userTrip){
+            if($userTrip->getDriver()){ 
+               $driver=$userTrip->getUser();
+            }
+        }
+        $tripDto->getDriver()->setNotation($service->getNotation($driver));
         return $this->json($tripDto, 200, [], ['json_encode_options' => JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES]);
     }
 

@@ -12,6 +12,9 @@ Class UserDtoMin {
     private ?string $picture = null;
     private ?int $notation = null;
     private bool $isActive = true;
+    private ?array $reviews = null;
+
+    
 
     /**
      * Get the value of id
@@ -129,6 +132,31 @@ Class UserDtoMin {
     public function setIsActive($isActive)
     {
         $this->isActive = $isActive;
+
+        return $this;
+    }
+
+     
+    /**
+     * Get the value of reviews
+     *
+     * @return  ReviewDto[]|null
+     */ 
+    public function getReviews()
+    {
+        return $this->reviews;
+    }
+
+    /**
+     * Set the value of reviews
+     *
+     * @param  ReviewDto[]|null  $reviews
+     *
+     * @return  self
+     */ 
+    public function setReviews($reviews)
+    {
+        $this->reviews = $reviews;
 
         return $this;
     }

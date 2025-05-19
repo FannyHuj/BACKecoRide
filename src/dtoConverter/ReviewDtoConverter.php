@@ -1,8 +1,9 @@
 <?php
 namespace App\dtoConverter;
 
+use App\dto\ReviewDto;
 use App\Entity\Review;
-use Symfony\Bundle\MakerBundle\Security\UserClassConfiguration;
+
 
 class ReviewDtoConverter {
 
@@ -17,6 +18,19 @@ class ReviewDtoConverter {
         $review->setTrip($trip);
 
         return $review;
+    }
+
+    public function convertToDto(Review $review)
+    {
+
+        $reviewDto = new ReviewDto();
+        $reviewDto->setId($review->getId());
+        $reviewDto->setComment($review->getComment());
+        $reviewDto->setNotation($review->getNotation());
+        $reviewDto->setPublish($review->getPublish());
+    
+
+        return $reviewDto;
     }
 
 }

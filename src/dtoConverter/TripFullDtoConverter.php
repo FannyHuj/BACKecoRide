@@ -4,8 +4,9 @@ namespace App\dtoConverter;
 use App\dto\TripFullDto;
 use App\dto\UserDtoMin;
 use App\dto\CarMinDto;
+use App\dto\ReviewDto;
 use App\Entity\Trip;
-use App\Entity\Car;
+use App\Entity\User;
 use DateTime;
 
 class TripFullDtoConverter {
@@ -44,6 +45,7 @@ class TripFullDtoConverter {
       $tripDto->setCreditPrice($entity->getCreditPrice());
       $tripDto->setStatus($entity->getStatus());
 
+   
       
       // Gérer la voiture
       $carDto = new CarMinDto();
@@ -51,31 +53,61 @@ class TripFullDtoConverter {
       $carDto->setModel($entity->getCar()->getModel());
       $carDto->setEnergy($entity->getCar()->getEnergy());
       $carDto->setColor($entity->getCar()->getColor());
+      $carDto->setBrand($entity->getCar()->getBrand());
       $tripDto->setCar($carDto);
   
       // Gérer le conducteur
       $driver = new UserDtoMin();
       $userTripEntity = $entity->getUsers();
-      
+
       // Trouver l'utilisateur avec le champ 'driver' égal à true
       $driverFound = false;
-      foreach ($userTripEntity as $userTrip) {
-          if ($userTrip->getDriver() === true) {
-              $userEntity = $userTrip->getUser();
-              $driver->setId($userEntity->getId());
-              $driver->setLastName($userEntity->getLastName());
-              $driver->setFirstName($userEntity->getFirstName());
-              $driver->setPicture($userEntity->getPicture());
-              $driverFound = true;
-              break;
-          }
-      }
+
+       $reviews = [];
+
+   
+      foreach ($entity->getUsers() as $userTrip) {
+    $user = $userTrip->getUser();
+    if (!$userTrip->getDriver() || !$user) {
+        continue;
+    }
+
+    $driver = new UserDtoMin();
+    $driver->setId($user->getId());
+    $driver->setLastName($user->getLastName());
+    $driver->setFirstName($user->getFirstName());
+    $driver->setPicture($user->getPicture());
+
+    $reviews = [];
+    foreach ($user->getReview() as $reviewEntity) {
+        $reviewDto = new ReviewDto();
+        $reviewDto->setId($reviewEntity->getId());
+        $reviewDto->setComment($reviewEntity->getComment());
+        $reviewDto->setNotation($reviewEntity->getNotation());
+        $reviews[] = $reviewDto;
+    }
+
+    $driver->setReviews($reviews);
+    break; // si un seul chauffeur
+}
+
   
       if (!$driverFound) {
           throw new \Exception('No driver found for this trip');
       }
   
-      $tripDto->setDriver($driver);
+     //je veux récupérer les review 
+
+          
+        // foreach ($userEntity->getReview() as $reviewEntity) {
+        //     $reviewDto = new ReviewDto();
+        //     $reviewDto->setId($reviewEntity->getId());
+        //     $reviewDto->setComment($reviewEntity->getComment());
+        //     $reviewDto->setNotation($reviewEntity->getNotation());
+        //     $reviews[] = $reviewDto;
+        // }
+        
+         $tripDto->setDriver($driver);
   
       return $tripDto;
   }

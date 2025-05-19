@@ -31,4 +31,17 @@ class ReviewController extends AbstractController
             return $this->json(['status' => 'success']);
 
 }
+
+#[Route('/api/admin/all/reviews', methods: ['GET'])]
+public function getAllReviews(ReviewRepository $reviewRepository, ReviewDtoConverter $converter): JsonResponse
+{
+    $reviews = $reviewRepository->findAll();
+    $reviewDtos = [];
+
+    foreach ($reviews as $review) {
+        $reviewDtos[] = $converter->convertToDto($review);
+    }
+
+    return $this->json($reviewDtos);
+}
 }

@@ -23,6 +23,9 @@ class ReportTrip
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $detail = null;
 
+    #[ORM\ManyToOne]
+    private ?User $reportOwner = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -60,6 +63,18 @@ class ReportTrip
     public function setDetail(?string $detail): static
     {
         $this->detail = $detail;
+
+        return $this;
+    }
+
+    public function getReportOwner(): ?User
+    {
+        return $this->reportOwner;
+    }
+
+    public function setReportOwner(?User $reportOwner): static
+    {
+        $this->reportOwner = $reportOwner;
 
         return $this;
     }

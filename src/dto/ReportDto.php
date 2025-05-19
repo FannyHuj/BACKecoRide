@@ -4,10 +4,11 @@ namespace App\dto;
 
 Class ReportDto {
 
-    private ?int $idTrip = null;
-    private ?string $driver = null;
+    private ?TripFullDto $idTrip = null;
+    private ?UserDtoMin $driver = null;
     private ?\DateTimeInterface $date = null;
     private ?string $detail = null;
+    private ?UserDtoMin $reportOwner = null;
 
 
     /**
@@ -86,6 +87,26 @@ Class ReportDto {
     public function setDetail($detail)
     {
         $this->detail = $detail;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of reportOwner
+     */ 
+    public function getReportOwner()
+    {
+        return $this->reportOwner;
+    }
+
+    /**
+     * Set the value of reportOwner
+     *
+     * @return  self
+     */ 
+    public function setReportOwner($reportOwner)
+    {
+        $this->reportOwner = $reportOwner;
 
         return $this;
     }

@@ -81,6 +81,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'boolean')]
     private bool $active = true;
 
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    private ?DriverPreferences $driverPreferences = null;
+
 
     public function __construct()
     {
@@ -376,6 +379,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setActive($active)
     {
         $this->active = $active;
+
+        return $this;
+    }
+
+    public function getDriverPreferences(): ?DriverPreferences
+    {
+        return $this->driverPreferences;
+    }
+
+    public function setDriverPreferences(?DriverPreferences $driverPreferences): static
+    {
+        $this->driverPreferences = $driverPreferences;
 
         return $this;
     }

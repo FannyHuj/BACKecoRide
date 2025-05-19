@@ -15,6 +15,7 @@ Class TripFullDto {
     private ?int $creditPrice = null;
     private ?CarMinDto $car = null;
     private ?UserDtoMin $driver = null;
+   
 
     
     /**
@@ -219,4 +220,6 @@ Class TripFullDto {
 
         return $this;
     }
+
+   
 }

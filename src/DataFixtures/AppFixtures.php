@@ -41,7 +41,7 @@ class AppFixtures extends Fixture
         $alice->setPassword($this->userPasswordHasher->hashPassword($user, "password"));
         $alice->setCredit(20);
         $alice->setActive(true);
-        $alice->setFirstName("Tom");
+        $alice->setFirstName("Alice");
         $alice->setLastName("Rider");
         $manager->persist($alice);
 
@@ -51,7 +51,7 @@ class AppFixtures extends Fixture
         $bob->setPassword($this->userPasswordHasher->hashPassword($user, "password"));
         $bob->setCredit(20);
         $bob->setActive(true);
-        $bob->setFirstName("Judith");
+        $bob->setFirstName("Bob");
         $bob->setLastName("Grimes");
         $manager->persist($bob);
 

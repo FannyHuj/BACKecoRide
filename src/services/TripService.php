@@ -44,8 +44,11 @@ class TripService {
             $reviews=$this->reviewRepository->findByTrip($trip);
 
             foreach($reviews as $review) {
-                $totalNotes += $review->getNotation();
-                $nbreNote++;
+                if($review->getPublish()) {
+                     $totalNotes += $review->getNotation();
+                     $nbreNote++;
+                }
+               
             }
         }
         
@@ -146,8 +149,22 @@ class TripService {
 
     private function sendMailToPassengers($trip, $user){
         foreach($trip->getUsers() as $ut){
-            if($ut->getDriver()!=true  && $ut->getUser()->getId()==$user->getId()){
-                $this->mailService->sendEmail("trajet annulé", "Annulation de votre trajet", $ut->getUser()->getEmail());
+
+            //Logger l'email
+            $this->logger->debug('Email', [$ut->getDriver(),$ut->getUser()->getId(),$user->getId()]);
+
+            //envoyer un mail au passager
+
+            if(!$ut->getDriver() && $ut->getUser()->getId()!=$user->getId()){
+                //Envoyer un mail présentable en html 
+                $htmlContent = "<p>Bonjour,</p>";
+                $htmlContent .= "<h1>Annulation de votre trajet</h1>";
+                $htmlContent .= "<p>Le trajet que vous avez réservé à destination de ". $trip->getArrivalLocation()." a été annulé par le conducteur.</p>";
+                $htmlContent .= "<p>Un remboursement à été effectué sur votre compte</p>";
+                $htmlContent .= "<p>Nous vous prions de nous excuser pour la gêne occasionnée.</p>";
+                
+
+                $this->mailService->sendEmail($htmlContent, "Annulation de votre trajet", $ut->getUser()->getEmail());
             }
         }
     }
