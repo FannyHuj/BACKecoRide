@@ -3,9 +3,10 @@
 namespace App\Entity;
 
 use App\Repository\TripRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use phpDocumentor\Reflection\Types\Collection;
 
 #[ORM\Entity(repositoryClass: TripRepository::class)]
 class Trip
@@ -15,47 +16,37 @@ class Trip
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $departDate = null;
-
-    #[ORM\Column(type: Types::TIME_MUTABLE)]
-    private ?\DateTimeInterface $departHour = null;
 
     #[ORM\Column(length: 50)]
     private ?string $departLocation = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $arrivalDate = null;
-
-    #[ORM\Column(type: Types::TIME_MUTABLE)]
-    private ?\DateTimeInterface $arrivalHour = null;
 
     #[ORM\Column(length: 50)]
     private ?string $arrivalLocation = null;
 
-    #[ORM\Column(length: 50)]
-    private ?string $status = null;
+    #[ORM\Column(type: 'string', enumType: TripsStatusEnum::class)]
+    private ?TripsStatusEnum $status = null;
 
     #[ORM\Column]
     private ?int $placeNumber = null;
 
     #[ORM\Column]
-    private ?float $price = null;
+    private ?int $creditPrice = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $person = null;
+    #[ORM\ManyToOne(targetEntity: Car::class)]
+    private ?Car $car;
 
-    #[ORM\ManyToMany(targetEntity: Trip::class, inversedBy: 'trips')]
+
+    #[ORM\OneToMany(targetEntity: UserTrip::class, cascade: ['persist'], mappedBy:'trip')]
     private Collection $users;
 
-    public function getUsers(): Collection
+    public function __construct()
     {
-        return $this->users;
-    }
-
-    public function setUsers(Collection $users): void
-    {
-        $this->users = $users;
+        $this->users = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -63,28 +54,19 @@ class Trip
         return $this->id;
     }
 
+    public function setId(?int $id): void
+    {
+        $this->id = $id;
+    }
+
     public function getDepartDate(): ?\DateTimeInterface
     {
         return $this->departDate;
     }
 
-    public function setDepartDate(\DateTimeInterface $departDate): static
+    public function setDepartDate(?\DateTimeInterface $departDate): void
     {
         $this->departDate = $departDate;
-
-        return $this;
-    }
-
-    public function getDepartHour(): ?\DateTimeInterface
-    {
-        return $this->departHour;
-    }
-
-    public function setDepartHour(\DateTimeInterface $departHour): static
-    {
-        $this->departHour = $departHour;
-
-        return $this;
     }
 
     public function getDepartLocation(): ?string
@@ -92,11 +74,9 @@ class Trip
         return $this->departLocation;
     }
 
-    public function setDepartLocation(string $departLocation): static
+    public function setDepartLocation(?string $departLocation): void
     {
         $this->departLocation = $departLocation;
-
-        return $this;
     }
 
     public function getArrivalDate(): ?\DateTimeInterface
@@ -104,47 +84,29 @@ class Trip
         return $this->arrivalDate;
     }
 
-    public function setArrivalDate(\DateTimeInterface $arrivalDate): static
+    public function setArrivalDate(?\DateTimeInterface $arrivalDate): void
     {
         $this->arrivalDate = $arrivalDate;
-
-        return $this;
     }
-
-    public function getArrivalHour(): ?\DateTimeInterface
-    {
-        return $this->arrivalHour;
-    }
-
-    public function setArrivalHour(\DateTimeInterface $arrivalHour): static
-    {
-        $this->arrivalHour = $arrivalHour;
-
-        return $this;
-    }
-
+    
     public function getArrivalLocation(): ?string
     {
         return $this->arrivalLocation;
     }
 
-    public function setArrivalLocation(string $arrivalLocation): static
+    public function setArrivalLocation(?string $arrivalLocation): void
     {
         $this->arrivalLocation = $arrivalLocation;
-
-        return $this;
     }
 
-    public function getStatus(): ?string
+    public function getStatus(): ?TripsStatusEnum
     {
         return $this->status;
     }
 
-    public function setStatus(string $status): static
+    public function setStatus(?TripsStatusEnum $status): void
     {
         $this->status = $status;
-
-        return $this;
     }
 
     public function getPlaceNumber(): ?int
@@ -152,33 +114,52 @@ class Trip
         return $this->placeNumber;
     }
 
-    public function setPlaceNumber(int $placeNumber): static
+    public function setPlaceNumber(?int $placeNumber): void
     {
         $this->placeNumber = $placeNumber;
-
-        return $this;
     }
 
-    public function getPrice(): ?float
+    public function getcreditPrice(): ?int
     {
-        return $this->price;
+        return $this->creditPrice;
     }
 
-    public function setPrice(float $price): static
+    public function setcreditPrice(?int $creditPrice): void
     {
-        $this->price = $price;
-
-        return $this;
+        $this->creditPrice = $creditPrice;
     }
 
-    public function getPerson(): ?string
+    public function getCar(): ?Car
     {
-        return $this->person;
+        return $this->car;
     }
 
-    public function setPerson(string $person): static
+    public function setCar(?Car $car): void
     {
-        $this->person = $person;
+        $this->car = $car;
+    }
+
+    /**
+     * @return Collection<int, User>
+     */
+    public function getUsers(): Collection
+    {
+        return $this->users;
+    }
+
+    public function addUser(UserTrip $userTrip): self
+    {
+            if (!$this->users->contains($userTrip)) {
+                $this->users->add($userTrip);
+                $userTrip->setTrip($this); // Maintient la cohérence de la relation bidirectionnelle
+            }
+
+            return $this;
+    }
+
+    public function removeUsers(User $users): static
+    {
+        $this->users->removeElement($users);
 
         return $this;
     }

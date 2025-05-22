@@ -17,10 +17,16 @@ class Review
     private ?string $comment = null;
 
     #[ORM\Column(length: 50, nullable: true)]
-    private ?string $notation = null;
+    private ?int $notation = null;
 
     #[ORM\Column(length: 50, nullable: true)]
-    private ?string $status = null;
+    private ?bool $publish = null;
+
+    #[ORM\ManyToOne(inversedBy: 'review')]
+    private ?User $owner = null;
+
+    #[ORM\ManyToOne]
+    private ?Trip $trip = null;
 
     public function getId(): ?int
     {
@@ -39,26 +45,66 @@ class Review
         return $this;
     }
 
-    public function getNotation(): ?string
+    public function getNotation(): ?int
     {
         return $this->notation;
     }
 
-    public function setNotation(?string $notation): static
+    public function setNotation(?int $notation): static
     {
         $this->notation = $notation;
 
         return $this;
     }
 
-    public function getStatus(): ?string
+    public function getTrip(): ?Trip
     {
-        return $this->status;
+        return $this->trip;
     }
 
-    public function setStatus(?string $status): static
+    public function setTrip(?Trip $trip): static
     {
-        $this->status = $status;
+        $this->trip = $trip;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of publish
+     */ 
+    public function getPublish()
+    {
+        return $this->publish;
+    }
+
+    /**
+     * Set the value of publish
+     *
+     * @return  self
+     */ 
+    public function setPublish($publish)
+    {
+        $this->publish = $publish;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of owner
+     */ 
+    public function getOwner()
+    {
+        return $this->owner;
+    }
+
+    /**
+     * Set the value of owner
+     *
+     * @return  self
+     */ 
+    public function setOwner($owner)
+    {
+        $this->owner = $owner;
 
         return $this;
     }

@@ -8,7 +8,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class RoleController extends AbstractController
 {
-    #[Route('/role', name: 'app_role')]
+    #[Route('/api/role', name: 'app_role')]
     public function index(): Response
     {
         return $this->render('role/index.html.twig', [

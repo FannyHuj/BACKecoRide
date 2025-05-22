@@ -16,6 +16,16 @@ class CarRepository extends ServiceEntityRepository
         parent::__construct($registry, Car::class);
     }
 
+    public function findCarById($id){
+
+        return $this->find($id);
+    }
+
+     public function save(Car $car){
+        $this->getEntityManager()->persist($car);
+        $this->getEntityManager()->flush();
+    }
+
     //    /**
     //     * @return Car[] Returns an array of Car objects
     //     */

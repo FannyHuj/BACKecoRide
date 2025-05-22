@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\CarRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: CarRepository::class)]
@@ -19,40 +20,31 @@ class Car
     #[ORM\Column(length: 50)]
     private ?string $registration = null;
 
-    #[ORM\Column(length: 50)]
-    private ?string $energy = null;
+    #[ORM\Column(length: 50, enumType:EnergyEnum::class)]
+    private ?EnergyEnum $energy = null;
 
     #[ORM\Column(length: 50)]
     private ?string $color = null;
 
+    #[ORM\Column (type: Types::DATETIME_MUTABLE)]
+    private ?\DateTimeInterface $firstRegistrationDate = null;
+    
     #[ORM\Column(length: 50)]
-    private ?string $firstRegistrationDate = null;
+    private ?string $brand;
 
-    #[ORM\OneToOne(targetEntity: Brand::class)]
-    private Collection $car;
+    #[ORM\ManyToOne(inversedBy: 'cars')]
+    private ?User $user = null;
 
-    public function getCars(): Collection
+    public function getBrand()  
     {
-        return $this->cars;
+        return $this->brand;
+    }   
+
+    public function setBrand($brand): void
+    {
+        $this->brand = $brand;
     }
 
-    public function setCars(Collection $cars): void
-    {
-        $this->cars = $cars;
-    }
-
-    public function getCar(): Collection
-    {
-        return $this->car;
-    }
-
-    public function setCar(Collection $car): void
-    {
-        $this->car = $car;
-    }
-
-    #[ORM\OneToOne(targetEntity: User::class)]
-    private Collection $cars;
     public function getId(): ?int
     {
         return $this->id;
@@ -82,18 +74,6 @@ class Car
         return $this;
     }
 
-    public function getEnergy(): ?string
-    {
-        return $this->energy;
-    }
-
-    public function setEnergy(string $energy): static
-    {
-        $this->energy = $energy;
-
-        return $this;
-    }
-
     public function getColor(): ?string
     {
         return $this->color;
@@ -106,12 +86,54 @@ class Car
         return $this;
     }
 
-    public function getFirstRegistrationDate(): ?string
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of energy
+     */ 
+    public function getEnergy()
+    {
+        return $this->energy;
+    }
+
+    /**
+     * Set the value of energy
+     *
+     * @return  self
+     */ 
+    public function setEnergy($energy)
+    {
+        $this->energy = $energy;
+
+        return $this;
+    }
+
+ 
+
+    /**
+     * Get the value of firstRegistrationDate
+     */ 
+    public function getFirstRegistrationDate()
     {
         return $this->firstRegistrationDate;
     }
 
-    public function setFirstRegistrationDate(string $firstRegistrationDate): static
+    /**
+     * Set the value of firstRegistrationDate
+     *
+     * @return  self
+     */ 
+    public function setFirstRegistrationDate($firstRegistrationDate)
     {
         $this->firstRegistrationDate = $firstRegistrationDate;
 
