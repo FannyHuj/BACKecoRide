@@ -1,52 +1,47 @@
-# === Builder stage: installer Composer & dépendances PHP ===
-FROM php:8.2-apache AS builder
-
-# Installer dépendances système et PHP (PDO MySQL, intl, zip)
-RUN apt-get update \
- && apt-get install -y git unzip libzip-dev zlib1g-dev libicu-dev \
- && docker-php-ext-install pdo_mysql intl zip
-
-# Installer Composer
-COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
-
-WORKDIR /app
-
-COPY . .
-
-RUN  chmod +x bin/console
-# Copier et installer les dépendances PHP
-COPY composer.json composer.lock ./
-RUN composer install --no-dev --prefer-dist --no-interaction --optimize-autoloader
-
-# Copier le code
-
-# === Runtime stage: Apache + PHP ===
+# === 1) Base PHP + Apache ===
 FROM php:8.2-apache
 
-# Réinstaller les mêmes extensions
+
+
+# === 3) Travailler sous /var/www/html ===
+WORKDIR /var/www/html
+
+# === 4) Installer les dépendances système, PHP et Apache mods ===
 RUN apt-get update \
- && apt-get install -y libzip-dev zlib1g-dev libicu-dev \
- && docker-php-ext-install pdo_mysql intl zip
+ && apt-get install -y git unzip libzip-dev zlib1g-dev libicu-dev \
+ && docker-php-ext-install pdo_mysql intl zip \
+ && a2enmod rewrite headers
 
-# Activer mod_rewrite indispensable pour Symfony
-RUN a2enmod rewrite headers
-
-# Copier Composer (utile pour les scripts migrations)
+# === 5) Installer Composer ===
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-# Copier code & vendor depuis le builder
-WORKDIR /app
-COPY --from=builder /app /app
+# === 6) Copier le code SOURCE dans l'image ===
+COPY . .
 
-# Ajuster DocumentRoot pour Symfony public/
-RUN sed -ri -e 's!/var/www/html!/app/public!g' /etc/apache2/sites-available/*.conf
+# === 7) Préparer Symfony ===
+RUN chmod +x bin/console \
+ && composer install \
+      --no-dev \
+      --prefer-dist \
+      --no-interaction \
+      --optimize-autoloader \
+      --classmap-authoritative \
+      --no-scripts \
+ && php bin/console cache:clear --no-warmup --env=prod \
+ && php bin/console cache:warmup   --env=prod
 
-# Copier et rendre exécutable l’entrypoint
-COPY docker/entrypoint.sh /usr/local/bin/entrypoint
-RUN chmod +x /usr/local/bin/entrypoint
+# === 8) Ajuster le DocumentRoot pour Symfony/public ===
+RUN sed -ri \
+    's!DocumentRoot /var/www/html!DocumentRoot /var/www/html/public!g' \
+    /etc/apache2/sites-available/*.conf
 
-# Exposer le port HTTP
 EXPOSE 80
 
-ENTRYPOINT ["entrypoint"]
-CMD ["apache2-foreground"]
+# === 9) Au container start, attendre la BDD, migrer, démarrer Apache ===
+CMD ["bash","-lc", "\
+    until php bin/console doctrine:query:sql 'SELECT 1' >/dev/null 2>&1; do \
+      echo 'Waiting for DB…'; sleep 1; \
+    done; \
+    php bin/console doctrine:migrations:migrate --no-interaction --env=prod; \
+    apache2-foreground\
+"]
