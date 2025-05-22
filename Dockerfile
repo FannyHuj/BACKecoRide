@@ -1,9 +1,7 @@
 # === 1) Base PHP + Apache ===
 FROM php:8.2-apache
 
-# === 2) Variables d'env prod ===
-ENV APP_ENV=prod \
-    APP_DEBUG=0
+
 
 # === 3) Travailler sous /var/www/html ===
 WORKDIR /var/www/html
