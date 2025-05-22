@@ -6,6 +6,7 @@ use App\dtoConverter\CarDtoConverter;
 use App\dto\CarDto;
 use App\Repository\CarRepository;
 use App\Repository\UserRepository;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -20,7 +21,7 @@ class CarController extends AbstractController
 
                             $convert=new CarDtoConverter();
                             $car=$convert->converterToEntity($carDto);
-                            $user=$userRepository->findUserById($carDto->getUser()->getId());
+                            $user=$userRepository->findUserById($carDto->getDriver()->getId());
                             $car->setUser($user);
                             $carRepository->save($car);
 

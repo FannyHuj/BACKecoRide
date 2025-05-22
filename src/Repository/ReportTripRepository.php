@@ -26,6 +26,12 @@ class ReportTripRepository extends ServiceEntityRepository
     }
 
 
+    public function findById($id): ?ReportTrip
+    {
+         return $this->find($id);
+    }
+
+
     //    /**
     //     * @return ReportTrip[] Returns an array of ReportTrip objects
     //     */

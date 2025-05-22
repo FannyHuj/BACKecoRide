@@ -8,7 +8,7 @@ Class ReviewDto {
     private ?string $comment = null;
     private ?string $notation = null;
     private ?bool $publish = null;
-    private ?int $ownerId = null;
+    private ?UserDtoMin $ownerId = null;
     private ?int $tripId = null;
 
 

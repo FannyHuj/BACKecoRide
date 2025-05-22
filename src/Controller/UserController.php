@@ -17,14 +17,14 @@ use Psr\Log\LoggerInterface;
 class UserController extends AbstractController
 {
 
-    #[Route('/newUser', methods:['POST'])] 
+    #[Route('/api/newUser', methods:['POST'])] 
     public function new(Request $request, LoggerInterface $logger, UserRepository $userRepository, UserPasswordHasherInterface $passwordHasher): JsonResponse {
     
-        
+         $hasPicture =false;
        
-
         // Vérification du champ 'picture' dans les fichiers uploadés
         if ($request->files->has('picture')) {
+            $hasPicture=true;
             $picture = $request->files->get('picture');
             $logger->debug('Picture file received', [
                 'originalName' => $picture->getClientOriginalName(),
@@ -63,8 +63,10 @@ class UserController extends AbstractController
         $signInDto->setAddress($request->request->get('address'));
         $signInDto->setBirthDate(new \DateTime($request->request->get('birthDate')));
         $signInDto->setPhoneNumber($request->request->get('phoneNumber'));
-        $signInDto->setRoles(['ROLE_USER']);
-        $signInDto->setPicture($newFileName);
+        $signInDto->setRoles([$request->request->get('roles')]);
+        if($hasPicture){
+            $signInDto->setPicture($newFileName);
+        }
         $signInDto->setCredit(20);
         
         $converter = new SignInDtoConverter(); 
@@ -86,10 +88,25 @@ class UserController extends AbstractController
     }
     
 
-    #[Route('/api/getAllUsers')]
+    #[Route('/api/admin/getAllUsers')]
     public function getAllUsers (UserRepository $userRepository): JsonResponse{
 
         $users= $userRepository->findAllUsers();
+
+        $convert=new UserDtoConverter();
+        $dtoList = [];
+
+        foreach($users as $user){
+            array_push($dtoList, $convert->converterToDto($user));
+        }
+
+        return $this->json($dtoList, 200, [], ['json_encode_options' => JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES]);
+    }
+
+    #[Route('/api/getAllEmployee')]
+    public function getAllEmployee (UserRepository $userRepository): JsonResponse{
+
+        $users= $userRepository->findAllEmployee();
 
         $convert=new UserDtoConverter();
         $dtoList = [];

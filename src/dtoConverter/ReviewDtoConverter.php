@@ -3,6 +3,8 @@ namespace App\dtoConverter;
 
 use App\dto\ReviewDto;
 use App\Entity\Review;
+use App\dto\UserDtoMin;
+use App\dto\TripFullDto;
 
 
 class ReviewDtoConverter {
@@ -28,6 +30,15 @@ class ReviewDtoConverter {
         $reviewDto->setComment($review->getComment());
         $reviewDto->setNotation($review->getNotation());
         $reviewDto->setPublish($review->getPublish());
+
+        $userDtoMin = new UserDtoMin();
+        $userDtoMin->setId($review->getOwner()->getId());
+        $userDtoMin->setFirstName($review->getOwner()->getFirstName());
+        $userDtoMin->setLastName($review->getOwner()->getLastName());
+        $userDtoMin->setEmail($review->getOwner()->getEmail());
+        $reviewDto->setOwnerId($userDtoMin);
+
+        $reviewDto->setTripID($review->getTrip()->getId());
     
 
         return $reviewDto;

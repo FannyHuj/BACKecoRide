@@ -12,7 +12,7 @@ Class CarDto {
     private ?string $registration = null;
     private ?EnergyEnum $energy = null;
     private ?string $color = null;
-    private ?DateTime $firstRegistrationDate = null;
+    private ?\DateTime $firstRegistrationDate = null;
     private ?string $brand = null;
     private ?UserDtoMin $driver = null;
 
@@ -153,9 +153,12 @@ Class CarDto {
      */ 
     public function setFirstRegistrationDate($firstRegistrationDate)
     {
-        $this->firstRegistrationDate = $firstRegistrationDate;
+         if (is_string($firstRegistrationDate)) {
+        $firstRegistrationDate = new \DateTime($firstRegistrationDate);
+    }
+    $this->firstRegistrationDate = $firstRegistrationDate;
 
-        return $this;
+    return $this;
     }
 
     /**

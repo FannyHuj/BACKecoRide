@@ -26,6 +26,9 @@ class ReportTrip
     #[ORM\ManyToOne]
     private ?User $reportOwner = null;
 
+    #[ORM\Column(length: 50, nullable: true)]
+    private ?bool $publish = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -75,6 +78,26 @@ class ReportTrip
     public function setReportOwner(?User $reportOwner): static
     {
         $this->reportOwner = $reportOwner;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of publish
+     */ 
+    public function getPublish()
+    {
+        return $this->publish;
+    }
+
+    /**
+     * Set the value of publish
+     *
+     * @return  self
+     */ 
+    public function setPublish($publish)
+    {
+        $this->publish = $publish;
 
         return $this;
     }

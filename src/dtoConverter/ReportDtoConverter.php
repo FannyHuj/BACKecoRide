@@ -30,17 +30,7 @@ class ReportDtoConverter {
         $tripFullDto->setArrivalDate($report->getTrip()->getArrivalDate());
         $tripFullDto->setArrivalLocation($report->getTrip()->getArrivalLocation());
 
-        $reportDto->setIdTrip($tripFullDto);
-        $reportDto->setDate($report->getDate());
-
-        $userDtoMin = new UserDtoMin();
-        $userDtoMin->setId($report->getReportOwner()->getId());
-        $userDtoMin->setFirstName($report->getReportOwner()->getFirstName());
-        $userDtoMin->setLastName($report->getReportOwner()->getLastName());
-
-        $reportDto->setReportOwner($userDtoMin);
-
-        foreach($report->getTrip()->getUsers() as $ut){
+         foreach($report->getTrip()->getUsers() as $ut){
                 if($ut->getDriver()  == true){
                     $driver=$ut->getUser();
                     
@@ -48,9 +38,23 @@ class ReportDtoConverter {
                     $userDtoMin->setId($driver->getId());
                     $userDtoMin->setFirstName($driver->getFirstName()); 
                     $userDtoMin->setLastName($driver->getLastName());
-                    $reportDto->setDriver($userDtoMin);
+                    $tripFullDto->setDriver($userDtoMin);
                 }
             }
+        
+        $reportDto->setIdTrip($tripFullDto);
+        $reportDto->setDate($report->getDate());
+        $reportDto->setId($report->getId());
+        
+        $userDtoMin = new UserDtoMin();
+        $userDtoMin->setId($report->getReportOwner()->getId());
+        $userDtoMin->setFirstName($report->getReportOwner()->getFirstName());
+        $userDtoMin->setLastName($report->getReportOwner()->getLastName());
+        $userDtoMin->setEmail($report->getReportOwner()->getEmail());
+
+        $reportDto->setReportOwner($userDtoMin);
+
+       
         
         $reportDto->setDetail($report->getDetail());
     

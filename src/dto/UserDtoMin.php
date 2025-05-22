@@ -2,7 +2,6 @@
 
 namespace App\dto;
 
-use App\Entity\User;
 
 Class UserDtoMin {
 
@@ -13,6 +12,7 @@ Class UserDtoMin {
     private ?int $notation = null;
     private bool $isActive = true;
     private ?array $reviews = null;
+    private ?string $email = null;
 
     
 
@@ -157,6 +157,26 @@ Class UserDtoMin {
     public function setReviews($reviews)
     {
         $this->reviews = $reviews;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of email
+     */ 
+    public function getEmail()
+    {
+        return $this->email;
+    }
+
+    /**
+     * Set the value of email
+     *
+     * @return  self
+     */ 
+    public function setEmail($email)
+    {
+        $this->email = $email;
 
         return $this;
     }

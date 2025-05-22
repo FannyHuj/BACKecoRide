@@ -1,6 +1,7 @@
 <?php
 namespace App\services;
 
+use App\dto\Dashboard;
 use App\Entity\User;
 use App\Repository\ReviewRepository;
 use App\Repository\TripRepository;
@@ -58,13 +59,24 @@ class TripService {
 
     }
 
+    public function getTotalInfo()
+        {
+            $countUser = $this->userRepository->countUsers();
+            $countTrip = $this->tripRepository->countTrips();
+
+            $dashboardDto = new Dashboard();
+           $dashboardDto->setTotalUser($countUser);
+            $dashboardDto->setTotalCredit($countTrip*2);
+            return $dashboardDto;
+        }
+
     public function getStatisticInfo()
         {
             $trips = $this->tripRepository->findAllTrip();
 
             $statisticDto = new StatisticDto();
 
-            $tripTerminatedNumber = 0;
+           
             $countsByDate = [];
 
             foreach ($trips as $trip) {
@@ -77,18 +89,14 @@ class TripService {
                     $countsByDate[$date]++;
                 }
 
-                // Comptage du nombre de trips terminés
-                if ($trip->getStatus() == TripsStatusEnum::Done) {
-                    $tripTerminatedNumber++;
-                }
+             
             }
 
             // On prépare les deux tableaux séparés : dates et nombres
             $days = array_keys($countsByDate);    // toutes les dates
             $tripsPerDay = array_values($countsByDate); // toutes les quantités
 
-            $statisticDto->setTotalUser(count($trips));
-            $statisticDto->setTotalCredit($tripTerminatedNumber * 2);
+           
             $statisticDto->setTripsPerDay($tripsPerDay);
             $statisticDto->setDay($days);
 

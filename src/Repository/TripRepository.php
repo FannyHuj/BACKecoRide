@@ -41,6 +41,15 @@ class TripRepository extends ServiceEntityRepository
         return $this->find($id);
     }
 
+    public function countTrips(){
+        return $this->createQueryBuilder('trip')
+            ->select('COUNT(trip.id)')
+            ->andWhere('trip.status = :status')
+            ->setParameter('status', TripsStatusEnum::Done)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
     public function search(SearchDto $searchDto){
 
         $qb = $this->createQueryBuilder('trip')

@@ -20,7 +20,11 @@ use App\services\EmailService;
 use DateTime;
 use App\Entity\TripsStatusEnum;
 use App\Entity\User;
+use App\Repository\ReviewRepository;
 use Symfony\Component\HttpFoundation\Request;
+use App\dtoConverter\ReviewDtoConverter;
+use App\dto\ReviewDto;
+use Doctrine\Common\Collections\Collection;
 
 class TripController extends AbstractController
 {
@@ -51,10 +55,11 @@ class TripController extends AbstractController
 
 
     #[Route('/api/trip/{id}')]
-    public function show (TripRepository $repository,$id,TripService $service): JsonResponse{
+    public function show (ReviewRepository $reviewRepository, TripRepository $repository,$id,TripService $service): JsonResponse{
 
         $trip= $repository->findTripById($id);
         $convert=new TripFullDtoConverter();
+         $ReviewConvert=new ReviewDtoConverter();
         $driver=new User();
        
         $tripDto=$convert->converterToDto($trip);
@@ -63,6 +68,15 @@ class TripController extends AbstractController
                $driver=$userTrip->getUser();
             }
         }
+
+       
+      $convertedReviews = [];
+
+        foreach($reviewRepository->findByUser($driver) as $review){
+            $convertedReviews[] = $ReviewConvert->convertToDto($review);
+        }
+
+        $tripDto->getDriver()->setReviews($convertedReviews);
         $tripDto->getDriver()->setNotation($service->getNotation($driver));
         return $this->json($tripDto, 200, [], ['json_encode_options' => JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES]);
     }

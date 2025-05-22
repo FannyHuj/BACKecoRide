@@ -65,47 +65,30 @@ class TripFullDtoConverter {
 
        $reviews = [];
 
-   
-      foreach ($entity->getUsers() as $userTrip) {
-    $user = $userTrip->getUser();
-    if (!$userTrip->getDriver() || !$user) {
-        continue;
-    }
 
-    $driver = new UserDtoMin();
-    $driver->setId($user->getId());
-    $driver->setLastName($user->getLastName());
-    $driver->setFirstName($user->getFirstName());
-    $driver->setPicture($user->getPicture());
 
-    $reviews = [];
-    foreach ($user->getReview() as $reviewEntity) {
-        $reviewDto = new ReviewDto();
-        $reviewDto->setId($reviewEntity->getId());
-        $reviewDto->setComment($reviewEntity->getComment());
-        $reviewDto->setNotation($reviewEntity->getNotation());
-        $reviews[] = $reviewDto;
-    }
+      $driverFound = false;
 
-    $driver->setReviews($reviews);
-    break; // si un seul chauffeur
-}
-
-  
+        foreach ($userTripEntity as $userTrip) {
+            // lister les avis
+            
+           
+            if ($userTrip->getDriver()) {
+                $driverFound = true;
+                $user = $userTrip->getUser();
+                if ($user) {
+                    $driver->setId($user->getId());
+                    $driver->setLastName($user->getLastName());
+                    $driver->setFirstName($user->getFirstName());
+                    $driver->setPicture($user->getPicture());
+                }
+                break; // On sort de la boucle dès qu'on trouve le conducteur
+            }
+        }
+      
       if (!$driverFound) {
           throw new \Exception('No driver found for this trip');
       }
-  
-     //je veux récupérer les review 
-
-          
-        // foreach ($userEntity->getReview() as $reviewEntity) {
-        //     $reviewDto = new ReviewDto();
-        //     $reviewDto->setId($reviewEntity->getId());
-        //     $reviewDto->setComment($reviewEntity->getComment());
-        //     $reviewDto->setNotation($reviewEntity->getNotation());
-        //     $reviews[] = $reviewDto;
-        // }
         
          $tripDto->setDriver($driver);
   

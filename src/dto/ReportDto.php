@@ -5,10 +5,10 @@ namespace App\dto;
 Class ReportDto {
 
     private ?TripFullDto $idTrip = null;
-    private ?UserDtoMin $driver = null;
     private ?\DateTimeInterface $date = null;
     private ?string $detail = null;
     private ?UserDtoMin $reportOwner = null;
+    private ?int $id = null;
 
 
     /**
@@ -31,26 +31,7 @@ Class ReportDto {
         return $this;
     }
 
-    /**
-     * Get the value of driver
-     */ 
-    public function getDriver()
-    {
-        return $this->driver;
-    }
-
-    /**
-     * Set the value of driver
-     *
-     * @return  self
-     */ 
-    public function setDriver($driver)
-    {
-        $this->driver = $driver;
-
-        return $this;
-    }
-
+    
     /**
      * Get the value of date
      */ 
@@ -107,6 +88,26 @@ Class ReportDto {
     public function setReportOwner($reportOwner)
     {
         $this->reportOwner = $reportOwner;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of id
+     */ 
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set the value of id
+     *
+     * @return  self
+     */ 
+    public function setId($id)
+    {
+        $this->id = $id;
 
         return $this;
     }

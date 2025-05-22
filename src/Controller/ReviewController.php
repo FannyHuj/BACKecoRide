@@ -32,7 +32,7 @@ class ReviewController extends AbstractController
 
 }
 
-#[Route('/api/admin/all/reviews', methods: ['GET'])]
+#[Route('/api/employee/all/reviews', methods: ['GET'])]
 public function getAllReviews(ReviewRepository $reviewRepository, ReviewDtoConverter $converter): JsonResponse
 {
     $reviews = $reviewRepository->findAll();
@@ -44,4 +44,26 @@ public function getAllReviews(ReviewRepository $reviewRepository, ReviewDtoConve
 
     return $this->json($reviewDtos);
 }
+
+ #[Route('/api/changeReviewStatus/{id}/{status}', methods:['PUT'])]
+    public function ChangeReportStatus (string $status, ReviewRepository $reviewRepository, int $id):JsonResponse{
+
+
+         $publish = false;
+        if ($status == 'true') {
+            $publish = true;
+        } elseif ($status == 'false') {
+            $publish = false;
+        } else {
+            return $this->json(['error' => 'Invalid status'], 400);
+        }
+        $reviewRepository->findById($id);
+        $reviewTrip = $reviewRepository->find($id);
+        $reviewTrip->setPublish($publish);
+
+        
+        $reviewRepository->save($reviewTrip);
+        
+        return $this->json(['status' => 'success']);
+    }
 }
