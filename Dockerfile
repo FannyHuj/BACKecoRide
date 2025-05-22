@@ -2,22 +2,25 @@ FROM php:8.2-apache
 
 WORKDIR /var/www/html
 
-# 1) Installer les dépendances système
+# 1) Installer les dépendances système (y compris ICU pour intl)
 RUN apt-get update \
- && apt-get install -y zip unzip git libzip-dev \
+ && apt-get install -y \
+      zip unzip git libzip-dev libicu-dev pkg-config \
  && docker-php-ext-install pdo_mysql intl zip \
  && a2enmod rewrite headers
 
-# 2) Installer Composer & Symfony CLI
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
- && curl -sS https://get.symfony.com/cli/installer | bash \
- && mv /root/.symfony*/bin/symfony /usr/local/bin/symfony
+# 2) Installer Composer
+RUN curl -sS https://getcomposer.org/installer \
+     | php -- --install-dir=/usr/local/bin --filename=composer
 
-# 3) Copier le code et installer les dépendances PHP
+# 3) Créer ou copier votre projet Symfony
+# Si vous partez de zéro :
+# RUN composer create-project symfony/website-skeleton . --no-interaction
+
+# Si vous avez déjà un repo :
 COPY . .
 RUN composer install --no-dev --optimize-autoloader \
  && chmod +x bin/console
 
-# 4) Exposer et lancer
 EXPOSE 8000
 CMD ["symfony", "serve", "--no-tls", "--allow-http", "--port=8000", "public/"]
